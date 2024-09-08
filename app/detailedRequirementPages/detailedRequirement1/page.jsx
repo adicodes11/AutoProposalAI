@@ -17,11 +17,11 @@ const HelperIcon = ({ imageSrc }) => {
       onMouseLeave={() => setShowPopover(false)}
     >
       <Image
-        src={assets.info_icon}
+        src={assets.info_icon} // Assuming infoIcon is your PNG icon
         width={24}
         height={24}
         alt="Info Icon"
-        className="ml-2"
+        className="ml-2" // Adds spacing between icon and text
       />
 
       {showPopover && (
@@ -67,6 +67,40 @@ const DetailedRequirement1 = () => {
   const [progress, setProgress] = useState(0); // Progress percentage
   const [fuelType, setFuelType] = useState(""); // Fuel type from session storage
 
+  // Retrieve data from session storage on component mount
+  useEffect(() => {
+    const storedFuelType = sessionStorage.getItem("fuelType");
+    if (storedFuelType) setFuelType(storedFuelType);
+
+    const storedAnswers = JSON.parse(sessionStorage.getItem("detailedAnswers")) || {};
+    setAnswers(storedAnswers);
+    calculateProgress();
+  }, []);
+
+  // Store the answers in session storage whenever they change
+  useEffect(() => {
+    sessionStorage.setItem("detailedAnswers", JSON.stringify(answers));
+    calculateProgress();
+  }, [answers]);
+
+  // Update answers based on user input
+  const handleAnswerChange = (field, value) => {
+    setAnswers((prevAnswers) => ({
+      ...prevAnswers,
+      [field]: value,
+    }));
+  };
+
+  // Update answers for checkbox selections
+  const handleCheckboxChange = (field, value) => {
+    setAnswers((prevAnswers) => ({
+      ...prevAnswers,
+      [field]: prevAnswers[field].includes(value)
+        ? prevAnswers[field].filter((item) => item !== value)
+        : [...prevAnswers[field], value],
+    }));
+  };
+
   // Calculate form progress based on filled sections
   const calculateProgress = () => {
     let filledSections = 0;
@@ -89,69 +123,21 @@ const DetailedRequirement1 = () => {
     setProgress(progressPercent);
   };
 
-  // Retrieve data from session storage on component mount
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedFuelType = sessionStorage.getItem("fuelType");
-      if (storedFuelType) setFuelType(storedFuelType);
-
-      const storedAnswers = JSON.parse(
-        sessionStorage.getItem("detailedAnswers")
-      ) || {};
-      setAnswers(storedAnswers);
-      calculateProgress();
-    }
-  }, []);
-
-  // Store the answers in session storage whenever they change
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem("detailedAnswers", JSON.stringify(answers));
-      calculateProgress();
-    }
-  }, [answers]);
-
-  // Update answers based on user input
-  const handleAnswerChange = (field, value) => {
-    setAnswers((prevAnswers) => ({
-      ...prevAnswers,
-      [field]: value,
-    }));
-  };
-
-  // Update answers for checkbox selections
-  const handleCheckboxChange = (field, value) => {
-    setAnswers((prevAnswers) => ({
-      ...prevAnswers,
-      [field]: prevAnswers[field].includes(value)
-        ? prevAnswers[field].filter((item) => item !== value)
-        : [...prevAnswers[field], value],
-    }));
-  };
-
   // Parse and submit the form
   const handleSubmit = async () => {
-    let fuelTankCapacityMin = null,
-      fuelTankCapacityMax = null,
-      bootSpaceMin = null,
-      bootSpaceMax = null;
+    let fuelTankCapacityMin = null, fuelTankCapacityMax = null, bootSpaceMin = null, bootSpaceMax = null;
 
     // Parse fuelTankCapacity if the format includes a dash (range format)
     if (answers.fuelTankCapacity) {
       if (answers.fuelTankCapacity.includes("-")) {
-        const [fuelTankCapacityMinStr, fuelTankCapacityMaxStr] =
-          answers.fuelTankCapacity.split("-");
-        fuelTankCapacityMin =
-          parseInt(fuelTankCapacityMinStr.trim().replace(/\D/g, ""), 10) ||
-          null;
+        const [fuelTankCapacityMinStr, fuelTankCapacityMaxStr] = answers.fuelTankCapacity.split("-");
+        fuelTankCapacityMin = parseInt(fuelTankCapacityMinStr.trim().replace(/\D/g, ""), 10) || null;
         fuelTankCapacityMax = fuelTankCapacityMaxStr.includes("and above")
           ? Number.MAX_SAFE_INTEGER
-          : parseInt(fuelTankCapacityMaxStr.trim().replace(/\D/g, ""), 10) ||
-            null;
+          : parseInt(fuelTankCapacityMaxStr.trim().replace(/\D/g, ""), 10) || null;
       } else {
-        fuelTankCapacityMin = fuelTankCapacityMax =
-          parseInt(answers.fuelTankCapacity.trim().replace(/\D/g, ""), 10) ||
-          null;
+        // If the user doesn't provide a range, assign both values the same number
+        fuelTankCapacityMin = fuelTankCapacityMax = parseInt(answers.fuelTankCapacity.trim().replace(/\D/g, ""), 10) || null;
       }
     }
 
@@ -159,14 +145,13 @@ const DetailedRequirement1 = () => {
     if (answers.bootSpace) {
       if (answers.bootSpace.includes("-")) {
         const [bootSpaceMinStr, bootSpaceMaxStr] = answers.bootSpace.split("-");
-        bootSpaceMin =
-          parseInt(bootSpaceMinStr.trim().replace(/\D/g, ""), 10) || null;
+        bootSpaceMin = parseInt(bootSpaceMinStr.trim().replace(/\D/g, ""), 10) || null;
         bootSpaceMax = bootSpaceMaxStr.includes("and above")
           ? Number.MAX_SAFE_INTEGER
           : parseInt(bootSpaceMaxStr.trim().replace(/\D/g, ""), 10) || null;
       } else {
-        bootSpaceMin = bootSpaceMax =
-          parseInt(answers.bootSpace.trim().replace(/\D/g, ""), 10) || null;
+        // If the user doesn't provide a range, assign both values the same number
+        bootSpaceMin = bootSpaceMax = parseInt(answers.bootSpace.trim().replace(/\D/g, ""), 10) || null;
       }
     }
 
@@ -346,8 +331,7 @@ const DetailedRequirement1 = () => {
             {/* Drive Modes */}
             <div className={`${currentSection === 1 ? "block" : "hidden"}`}>
               <h2 className="text-3xl font-bold mt-8 text-gray-700 flex items-center">
-                Which of the following drive modes are available in the car you
-                are interested in?
+                Which of the following drive modes are available in the car you are interested in?
                 <HelperIcon imageSrc={assets.logo} />
               </h2>
               <div className="grid grid-cols-2 gap-4 mt-4">
@@ -474,7 +458,7 @@ const DetailedRequirement1 = () => {
                 <div className="mb-4">
                   <h2 className="text-2xl font-bold text-gray-700 flex items-center">
                     Boot Space Capacity
-                    <HelperIcon imageSrc={assets.boot_space} />
+                    <HelperIcon imageSrc={assets.boot_space } />
                   </h2>
                   <select
                     value={answers.bootSpace}
@@ -505,7 +489,7 @@ const DetailedRequirement1 = () => {
               <h2 className="text-2xl font-bold text-gray-700 flex items-center">
                 Safety Features
                 <HelperIcon imageSrc={assets.logo} />
-              </h2>
+                </h2>
               <div className="space-y-12">
                 {/* Safety Features */}
                 <div className="grid grid-cols-2 gap-4 mb-4 mt-2">
