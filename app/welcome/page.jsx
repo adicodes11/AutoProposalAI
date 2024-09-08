@@ -1,12 +1,19 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function Welcome() {
   const router = useRouter();
+  const [firstName, setFirstName] = useState('User');
 
   // Retrieve the first name from session storage
-  const firstName = sessionStorage.getItem('firstName') || 'User';
+  useEffect(() => {
+    const storedFirstName = sessionStorage.getItem('firstName');
+    if (storedFirstName) {
+      setFirstName(storedFirstName);
+    }
+  }, []);
 
   const handleGetStarted = () => {
     router.push('/requirementPages/requirement1'); // Navigate to the Requirement1 page
@@ -37,7 +44,7 @@ export default function Welcome() {
           onClick={handleGetStarted}
           className="mt-4 bg-blue-500 text-white font-bold py-2 px-6 rounded hover:bg-blue-600 transition duration-300"
         >
-          Let’s Get Started
+          Let&apos;s Get Started
         </button>
       </div>
     </div>
