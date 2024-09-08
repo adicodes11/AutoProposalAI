@@ -62,6 +62,15 @@ const DetailedRequirement2 = () => {
   const [currentSection, setCurrentSection] = useState(0); // Active section
   const [progress, setProgress] = useState(0); // Progress percentage
 
+  // Check if we need to reload the page after navigating from DetailedRequirement1
+  useEffect(() => {
+    const shouldReload = sessionStorage.getItem('shouldReload');
+    if (shouldReload) {
+      sessionStorage.removeItem('shouldReload');
+      window.location.reload();
+    }
+  }, []);
+
   useEffect(() => {
     const storedAnswers = JSON.parse(sessionStorage.getItem("detailedAnswers2")) || {};
     setAnswers(storedAnswers);
@@ -151,6 +160,7 @@ const DetailedRequirement2 = () => {
 
   const handleBack = () => {
     if (currentSection === 0) {
+      sessionStorage.setItem('shouldReload', 'true');  // Set the reload flag
       router.push("/detailedRequirementPages/detailedRequirement1");
     } else {
       setCurrentSection(currentSection - 1);
