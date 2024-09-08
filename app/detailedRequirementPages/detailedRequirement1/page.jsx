@@ -66,6 +66,15 @@ const DetailedRequirement1 = () => {
   const [progress, setProgress] = useState(0); // Progress percentage
   const [fuelType, setFuelType] = useState(""); // Fuel type from session storage
 
+  // Check if we need to reload the page after navigating
+  useEffect(() => {
+    const shouldReload = sessionStorage.getItem('shouldReload');
+    if (shouldReload) {
+      sessionStorage.removeItem('shouldReload');
+      window.location.reload();
+    }
+  }, []);
+
   // Retrieve data from session storage on component mount
   useEffect(() => {
     const storedFuelType = sessionStorage.getItem("fuelType");
@@ -219,6 +228,7 @@ const DetailedRequirement1 = () => {
   const handleNext = async () => {
     if (currentSection === 4) {
       await handleSubmit();
+      sessionStorage.setItem('shouldReload', 'true'); // Add flag for page reload
       router.push("/detailedRequirementPages/detailedRequirement2");
     } else {
       setCurrentSection(currentSection + 1);
