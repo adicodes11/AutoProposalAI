@@ -81,6 +81,7 @@ const DetailedRequirement1 = () => {
   useEffect(() => {
     sessionStorage.setItem("detailedAnswers", JSON.stringify(answers));
     calculateProgress();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answers]);
 
   // Update answers based on user input
