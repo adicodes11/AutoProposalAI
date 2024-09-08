@@ -38,7 +38,7 @@ export default function Welcome() {
           Hey {firstName} 👋, Welcome to Auto Proposal AI
         </h1>
         <p className="text-lg text-gray-600 mb-8 text-center">
-          Let's start by getting to know your requirements.
+          Let&apos;s start by getting to know your requirements.
         </p>
         <button
           onClick={handleGetStarted}
