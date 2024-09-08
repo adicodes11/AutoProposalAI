@@ -1,8 +1,3 @@
 {
-  "extends": "next/core-web-vitals",
-  "rules": {
-    "react-hooks/exhaustive-deps": "off",  // Disable warnings about missing dependencies in hooks
-    "no-console": "off",                   // Disable warnings about console.log statements
-    "no-unused-vars": "off"                // Disable warnings about unused variables
-  }
+  "extends": "next/core-web-vitals"
 }
