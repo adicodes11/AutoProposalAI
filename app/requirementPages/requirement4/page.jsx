@@ -52,6 +52,8 @@ const Requirement4 = () => {
       });
 
       if (response.ok) {
+        // Set a flag in session storage to indicate we should refresh on next page load
+        sessionStorage.setItem('shouldReload', 'true');
         router.push('/detailedRequirementPages/detailedRequirement1'); // Navigate to detailedRequirement1
       } else {
         alert('Failed to submit your data. Please check the console for details.');
