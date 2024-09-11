@@ -1,28 +1,48 @@
 import { NextResponse } from "next/server";
 import CustomerRequirementInput from "@/models/CustomerRequirementInput";
 import { ConnectDB } from "@/lib/config/db";
+import { ObjectId } from "mongodb";
 
 export async function POST(req) {
-  const {
-    windowMirrorFeatures = [],
-    fogLights,
-    daytimeRunningLights,
-    headlights,
-    automaticHeadlamps,
-    followMeHomeHeadlamps,
-    taillights,
-    connectedCarFeatures = [],
-    infotainmentFeatures = [],
-    additionalFeatures = "",
-    carModelVariant = "",
-    extendedWarranty = "",
-    registrationInsurance = "",
-  } = await req.json();
-
   try {
+    // Connect to the database
     await ConnectDB();
 
-    // Build the update data object (without nested exteriorLighting)
+    // Parse the request body
+    const {
+      windowMirrorFeatures = [],
+      fogLights,
+      daytimeRunningLights,
+      headlights,
+      automaticHeadlamps,
+      followMeHomeHeadlamps,
+      taillights,
+      connectedCarFeatures = [],
+      infotainmentFeatures = [],
+      additionalFeatures = "",
+      carModelVariant = "",
+      extendedWarranty = "",
+      registrationInsurance = "",
+    } = await req.json();
+
+    // Log incoming data for debugging
+    console.log("Received data:", {
+      windowMirrorFeatures,
+      fogLights,
+      daytimeRunningLights,
+      headlights,
+      automaticHeadlamps,
+      followMeHomeHeadlamps,
+      taillights,
+      connectedCarFeatures,
+      infotainmentFeatures,
+      additionalFeatures,
+      carModelVariant,
+      extendedWarranty,
+      registrationInsurance,
+    });
+
+    // Build the update data object
     const updateData = {
       windowMirrorFeatures: windowMirrorFeatures.length > 0 ? windowMirrorFeatures : [],
       fogLights: fogLights || "",
@@ -40,20 +60,28 @@ export async function POST(req) {
       updatedAt: new Date(),
     };
 
-    // Find and update the most recent document (you should modify this query as needed)
+    // Update the most recent document or create a new one if none exists
     const result = await CustomerRequirementInput.findOneAndUpdate(
-      {}, // Adjust this filter based on your user/session handling (e.g., by user ID)
+      {}, // Adjust this filter based on your user/session handling
       updateData,
-      { sort: { createdAt: -1 }, new: true }
+      { sort: { createdAt: -1 }, new: true, upsert: true }
     );
 
     if (!result) {
+      console.error("No record found to update.");
       return NextResponse.json({ error: "No record found to update." }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true, data: result });
+    // Log the result for debugging
+    // console.log("Record updated or created:", result);
+
+    // Return the _id (requirementId) of the newly inserted/updated record
+    return NextResponse.json({ success: true, requirementId: result._id });
   } catch (error) {
+    // Log the error for debugging
     console.error("Error handling detailedRequirement2Route:", error);
+
+    // Return a JSON error response
     return NextResponse.json({ error: "Failed to submit data." }, { status: 500 });
   }
 }

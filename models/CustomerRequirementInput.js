@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-// Combined CustomerRequirementInputSchema
+// Combined CustomerRequirementInputSchema with sessionId
 const CustomerRequirementInputSchema = new mongoose.Schema({
   budgetMin: { type: Number, required: true },
   budgetMax: { type: Number, required: true },
@@ -23,9 +23,9 @@ const CustomerRequirementInputSchema = new mongoose.Schema({
   groundClearance: { type: String },
 
   // Fuel Tank & Boot Space as ranges
-  fuelTankCapacityMin: { type: Number, default: null }, // Default to null to avoid undefined
+  fuelTankCapacityMin: { type: Number, default: null },
   fuelTankCapacityMax: { type: Number, default: null },
-  bootSpaceMin: { type: Number, default: null },        // Default to null for unprovided values
+  bootSpaceMin: { type: Number, default: null },
   bootSpaceMax: { type: Number, default: null },
 
   // Non-nested Exterior Lighting fields
@@ -72,6 +72,9 @@ const CustomerRequirementInputSchema = new mongoose.Schema({
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to User model
   takenFrom: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // Reference if taken from another user
 
+  // Session ID for tracking
+  sessionId: { type: String, required: true }, // A common session ID for tracking
+  
 }, { timestamps: true });
 
 const CustomerRequirementInput = mongoose.models.CustomerRequirementInput || mongoose.model('CustomerRequirementInput', CustomerRequirementInputSchema);

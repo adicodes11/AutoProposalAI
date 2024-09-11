@@ -64,9 +64,9 @@ const DetailedRequirement2 = () => {
 
   // Check if we need to reload the page after navigating from DetailedRequirement1
   useEffect(() => {
-    const shouldReload = sessionStorage.getItem('shouldReload');
+    const shouldReload = sessionStorage.getItem("shouldReload");
     if (shouldReload) {
-      sessionStorage.removeItem('shouldReload');
+      sessionStorage.removeItem("shouldReload");
       window.location.reload();
     }
   }, []);
@@ -128,6 +128,7 @@ const DetailedRequirement2 = () => {
     };
 
     try {
+      // Step 1: Submit the user's detailed requirements
       const response = await fetch(
         "/api/detailedRequirementRoutes/detailedRequirement2Route",
         {
@@ -139,11 +140,31 @@ const DetailedRequirement2 = () => {
         }
       );
 
-      if (response.ok) {
-        alert("Your details have been submitted successfully!");
+      if (!response.ok) {
+        alert("Error submitting your details. Please try again.");
+        return;
+      }
+
+      const result = await response.json();
+      const { requirementId } = result; // Get the requirementId from the response
+
+      // Step 2: Call the Flask API for recommendations using the requirementId
+      const recommendationResponse = await fetch("http://localhost:5000/recommendations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ _id: requirementId }), // Pass the requirementId to Flask API
+      });
+
+      if (recommendationResponse.ok) {
+        const recommendationData = await recommendationResponse.json();
+        console.log("Recommendations:", recommendationData);
+        alert("Recommendations generated successfully!");
+        // Redirect to the analyzing page
         router.push("/analyzing");
       } else {
-        alert("Error submitting your details. Please try again.");
+        alert("Error generating recommendations. Please try again.");
       }
     } catch (error) {
       alert("A network error occurred. Please try again.");
@@ -152,7 +173,7 @@ const DetailedRequirement2 = () => {
 
   const handleNext = async () => {
     if (currentSection === 4) {
-      await handleSubmit();
+      await handleSubmit(); // Submit the form and trigger recommendations
     } else {
       setCurrentSection(currentSection + 1);
     }
@@ -160,7 +181,7 @@ const DetailedRequirement2 = () => {
 
   const handleBack = () => {
     if (currentSection === 0) {
-      sessionStorage.setItem('shouldReload', 'true');  // Set the reload flag
+      sessionStorage.setItem("shouldReload", "true"); // Set the reload flag
       router.push("/detailedRequirementPages/detailedRequirement1");
     } else {
       setCurrentSection(currentSection - 1);
@@ -475,7 +496,6 @@ const DetailedRequirement2 = () => {
             <div className={`${currentSection === 4 ? "block" : "hidden"}`}>
               <h2 className="text-3xl font-bold text-gray-700 flex items-center">
                 Personalized Inputs
-                {/* <HelperIcon imageSrc={assets.personalized_inputs} /> */}
               </h2>
               <div className="mb-6">
                 <h3 className="text-xl font-semibold mb-2">
@@ -512,13 +532,17 @@ const DetailedRequirement2 = () => {
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
                   {["Yes", "No"].map((option) => (
-                    <label key={option} className="block bg-gray-50 p-4 rounded-md shadow hover:bg-gray-100 transition-all">
+                    <label
+                      key={option}
+                      className="block bg-gray-50 p-4 rounded-md shadow hover:bg-gray-100 transition-all">
                       <input
                         type="radio"
                         name="extendedWarranty"
                         value={option}
                         checked={answers.extendedWarranty === option}
-                        onChange={() => handleAnswerChange("extendedWarranty", option)}
+                        onChange={() =>
+                          handleAnswerChange("extendedWarranty", option)
+                        }
                         className="mr-2"
                       />
                       {option === "Yes"
@@ -535,13 +559,17 @@ const DetailedRequirement2 = () => {
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
                   {["Yes", "No"].map((option) => (
-                    <label key={option} className="block bg-gray-50 p-4 rounded-md shadow hover:bg-gray-100 transition-all">
+                    <label
+                      key={option}
+                      className="block bg-gray-50 p-4 rounded-md shadow hover:bg-gray-100 transition-all">
                       <input
                         type="radio"
                         name="registrationInsurance"
                         value={option}
                         checked={answers.registrationInsurance === option}
-                        onChange={() => handleAnswerChange("registrationInsurance", option)}
+                        onChange={() =>
+                          handleAnswerChange("registrationInsurance", option)
+                        }
                         className="mr-2"
                       />
                       {option === "Yes"
@@ -558,14 +586,12 @@ const DetailedRequirement2 = () => {
           <div className="mt-12 flex justify-between">
             <button
               onClick={handleBack}
-              className="flex items-center px-6 py-2 border border-blue-700 rounded-md text-blue-700 font-bold bg-blue-100 hover:bg-blue-200 transition-all"
-            >
+              className="flex items-center px-6 py-2 border border-blue-700 rounded-md text-blue-700 font-bold bg-blue-100 hover:bg-blue-200 transition-all">
               Back
             </button>
             <button
               onClick={handleNext}
-              className="px-6 py-2 border border-red-700 rounded-md text-white font-bold bg-red-700 hover:bg-red-800 transition-all"
-            >
+              className="px-6 py-2 border border-red-700 rounded-md text-white font-bold bg-red-700 hover:bg-red-800 transition-all">
               {currentSection === 4 ? "Submit" : "Next"}
             </button>
           </div>

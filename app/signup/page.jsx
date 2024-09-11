@@ -34,12 +34,13 @@ export default function SignUp() {
       if (res.ok) {
         setMessage('User registered successfully!');
         
-        // Save the user's first name to session storage
+        // Save the user's first name and sessionId to session storage
         const firstName = formData.fullname.split(' ')[0];
         sessionStorage.setItem('firstName', firstName);
+        sessionStorage.setItem('sessionId', data.sessionId);  // Save sessionId to sessionStorage
 
         setTimeout(() => {
-          router.push('/signin'); // Redirect to the welcome page after a short delay
+          router.push('/signin'); // Redirect to the sign-in page after a short delay
         }, 1500); // Adjust the delay as needed
       } else {
         setMessage(data.error); // Display error message from the server

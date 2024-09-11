@@ -3,10 +3,10 @@ import CustomerRequirementInput from '@/models/CustomerRequirementInput';
 import { ConnectDB } from '@/lib/config/db';
 
 export async function POST(req) {
-  const { budgetMin, budgetMax, location, userId } = await req.json();
+  const { budgetMin, budgetMax, location, userId, sessionId } = await req.json();  // Include sessionId
   
   // Check if all required fields are present
-  if (!budgetMin || !budgetMax || !location || !userId) {
+  if (!budgetMin || !budgetMax || !location || !userId || !sessionId) {
     return NextResponse.json({ error: 'Missing required fields or user not logged in' }, { status: 400 });
   }
 
@@ -18,6 +18,7 @@ export async function POST(req) {
       budgetMax,
       location,
       createdBy: userId,  // Set the user who created this requirement
+      sessionId,          // Save the sessionId for tracking
       createdAt: new Date(),
     });
 

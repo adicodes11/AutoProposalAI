@@ -33,9 +33,10 @@ export default function SignIn() {
       if (res.ok) {
         setMessage('User signed in successfully!');
 
-        // Save the user's first name and userId to session storage
+        // Save the user's first name, userId, and sessionId to session storage
         sessionStorage.setItem('firstName', data.firstName);
         sessionStorage.setItem('userId', data.userId); // Save userId to sessionStorage
+        sessionStorage.setItem('sessionId', data.sessionId); // Save sessionId to sessionStorage
 
         // Redirect to the welcome page
         setTimeout(() => {

@@ -12,9 +12,10 @@ const Requirement1 = () => {
   const [showLocation, setShowLocation] = useState(false);
   const router = useRouter();
 
-  // Assume userId is fetched from session or authentication context
-  const userId = '66d5c93e711f3d3f93968f94';  // Example hardcoded userId
-
+  // Load userId and sessionId from sessionStorage
+  const userId = sessionStorage.getItem('userId');
+  const sessionId = sessionStorage.getItem('sessionId');  // Fetch the sessionId
+  
   // Load previous selections from sessionStorage
   useEffect(() => {
     const savedBudget = sessionStorage.getItem('budget');
@@ -41,33 +42,31 @@ const Requirement1 = () => {
   const handleBack = () => {
     router.push('/welcome');
   };
+
   const handleNext = async () => {
     if (!budget || !location) {
       alert('Please select both budget and location.');
       return;
     }
-  
-    // Retrieve userId from sessionStorage
-    const userId = sessionStorage.getItem('userId');
-    
-    if (!userId) {
-      alert('User not logged in.');
+
+    if (!userId || !sessionId) {
+      alert('User not logged in or session invalid.');
       return;
     }
-  
+
     const [minBudgetStr, maxBudgetStr] = budget.split(' - ');
     const minBudget = parseInt(minBudgetStr.replace('₹', '').replace(',', '').replace('Lakh', '')) * 100000;
     const maxBudget = maxBudgetStr === 'and above'
       ? Number.MAX_SAFE_INTEGER
       : parseInt(maxBudgetStr.replace('₹', '').replace(',', '').replace('Lakh', '')) * 100000;
-  
+
     try {
       const response = await fetch('/api/requirementPagesRoutes/requirement1Route', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ budgetMin: minBudget, budgetMax: maxBudget, location, userId }),  // Include userId
+        body: JSON.stringify({ budgetMin: minBudget, budgetMax: maxBudget, location, userId, sessionId }),  // Include sessionId
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         console.log('Success:', data);  // Log success message
@@ -82,7 +81,7 @@ const Requirement1 = () => {
       alert('An error occurred. Please try again.');
     }
   };
-  
+
   return (
     <div className="p-4 flex flex-col items-center justify-between h-screen relative">
       <div className="absolute top-5 left-[80px]">
