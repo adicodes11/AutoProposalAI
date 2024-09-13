@@ -10,6 +10,7 @@ export async function POST(req) {
 
     // Parse the request body
     const {
+      sessionId, // Include sessionId from the request body
       windowMirrorFeatures = [],
       fogLights,
       daytimeRunningLights,
@@ -25,8 +26,14 @@ export async function POST(req) {
       registrationInsurance = "",
     } = await req.json();
 
+    // Ensure sessionId is provided
+    if (!sessionId) {
+      return NextResponse.json({ error: "Session ID is required." }, { status: 400 });
+    }
+
     // Log incoming data for debugging
     console.log("Received data:", {
+      sessionId,
       windowMirrorFeatures,
       fogLights,
       daytimeRunningLights,
@@ -60,11 +67,11 @@ export async function POST(req) {
       updatedAt: new Date(),
     };
 
-    // Update the most recent document or create a new one if none exists
+    // Update the document based on sessionId or create a new one if none exists
     const result = await CustomerRequirementInput.findOneAndUpdate(
-      {}, // Adjust this filter based on your user/session handling
+      { sessionId }, // Filter based on sessionId
       updateData,
-      { sort: { createdAt: -1 }, new: true, upsert: true }
+      { sort: { createdAt: -1 }, new: true, upsert: true } // Sort by most recent and return updated document
     );
 
     if (!result) {
@@ -73,10 +80,10 @@ export async function POST(req) {
     }
 
     // Log the result for debugging
-    // console.log("Record updated or created:", result);
+    console.log("Record updated or created:", result);
 
-    // Return the _id (requirementId) of the newly inserted/updated record
-    return NextResponse.json({ success: true, requirementId: result._id });
+    // Return the sessionId along with the requirementId
+    return NextResponse.json({ success: true, sessionId, requirementId: result._id });
   } catch (error) {
     // Log the error for debugging
     console.error("Error handling detailedRequirement2Route:", error);

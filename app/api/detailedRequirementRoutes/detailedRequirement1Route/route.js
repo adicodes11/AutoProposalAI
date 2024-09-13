@@ -75,9 +75,11 @@ export async function POST(req) {
       return NextResponse.json({ error: "No record found to update." }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true, data: result });
+    // Return success with sessionId and updated data
+    return NextResponse.json({ success: true, sessionId, data: result });
   } catch (error) {
     console.error("Error handling detailedRequirement1Route:", error);
     return NextResponse.json({ error: "Failed to submit data." }, { status: 500 });
   }
 }
+  

@@ -1,55 +1,130 @@
 import { NextResponse } from 'next/server';
-import { ConnectDB } from '@/lib/config/db'; // Ensure your MongoDB config is correct
-import Top4Recommendation from '@/models/Top4Recommendation';
-import CarSpecificationDataset from '@/models/CarSpecificationDataset'; // Assuming this model exists for car details
+import { ConnectDB } from '@/lib/config/db';
 
-export async function GET(req) {
+export async function POST(req) {
   try {
-    // Extract sessionId from query parameters (if needed)
-    const { searchParams } = new URL(req.url);
-    const sessionId = searchParams.get('sessionId'); // Pass sessionId as a query parameter
+    // Parse the request body to get the sessionId
+    const { sessionId } = await req.json();
 
+    // Validate sessionId
     if (!sessionId) {
-      return NextResponse.json({ error: 'Session ID is missing' }, { status: 400 });
+      return NextResponse.json({ error: 'Session ID is required.' }, { status: 400 });
     }
 
+    // Connect to the database
     const db = await ConnectDB();
 
-    // Fetch the top 4 recommendations from the top4recommendations collection
-    const top4Data = await db
-      .collection('top4recommendations')
-      .findOne({ sessionId });
+    // Fetch the top 4 recommendations based on sessionId from the top4recommendations collection
+    const topRecommendations = await db.collection('top4recommendations').findOne({ sessionId });
 
-    if (!top4Data || !top4Data.recommendations || top4Data.recommendations.length === 0) {
-      return NextResponse.json({ error: 'No recommendations found for this session' }, { status: 404 });
+    // If no recommendations found, return an error
+    if (!topRecommendations || !topRecommendations.recommendations) {
+      return NextResponse.json({ error: 'No recommendations found for this session.' }, { status: 404 });
     }
 
-    const top4Recommendations = top4Data.recommendations;
+    // Fetch the carColor from customerrequirementinputs based on sessionId
+    const customerRequirement = await db.collection('customerrequirementinputs').findOne({ sessionId });
+    
+    // Extract carColor, with fallback to 'N/A' if it's not found
+    const carColor = customerRequirement?.carColor || 'N/A';
 
-    // Prepare an array to store the detailed car information
-    const detailedCarInfo = await Promise.all(
-      top4Recommendations.map(async (rec) => {
-        const carDetails = await db
-          .collection('CarSpecificationDataset')
-          .findOne({ Model: rec.carModel, Version: rec.version });
+    // Extract car model, version, and match percentage from the recommendations
+    const carDetails = await Promise.all(
+      topRecommendations.recommendations.map(async (recommendation) => {
+        const { carModel, version, matchPercentage } = recommendation;
 
-        // Return the car details with the recommended model and version name
-        return {
-          carModel: rec.carModel,
-          version: rec.version,
-          price: carDetails?.['Ex-Showroom Price'] || 'N/A',
-          engine: carDetails?.['Engine'] || 'N/A',
-          fuelType: carDetails?.['Fuel Type'] || 'N/A',
-          transmission: carDetails?.['Transmission Type'] || 'N/A',
-          mileage: carDetails?.['Mileage'] || 'N/A',
-        };
+        try {
+          // Fetch detailed car information from the CarSpecificationDataset collection
+          const carSpec = await db.collection('CarSpecificationDataset').findOne(
+            { Model: carModel, Version: version },
+            {
+              // Only fetch required fields
+              projection: {
+                'Ex-Showroom Price': 1,
+                'Fuel Type': 1,
+                'Transmission Type': 1,
+                'Body Type': 1,
+                'Seating Capacity': 1,
+                'Emission Standard': 1,
+                'NCAP Rating (Adult) (Star (Global NCAP))': 1,
+                'NCAP Rating (Child) (Star (Global NCAP))': 1,
+                'Ground Clearance (cm)': 1,
+                'Fuel Tank Capacity': 1,
+                'Bootspace(litres)': 1,
+                'Driving Range (km)': 1,
+                'Engine Type': 1,
+                'Engine Power (cc)': 1,
+                'Mileage (ARAI) (kmpl)': 1,
+                'Top Speed (kmph)': 1,
+                'Wheels': 1,
+                'Parking Assist': 1,
+                'Drive Modes': 1,
+                'Headlights': 1,
+                'Air Conditioner': 1,
+                'Display': 1,
+                'Head Unit Size(inch)': 1
+              }
+            }
+          );
+
+          // Return partial data if no car spec found
+          if (!carSpec) {
+            return {
+              carModel,
+              version,
+              carColor,  // Added car color
+              matchPercentage,  // Add match percentage for displaying in frontend
+              details: 'Details not found in CarSpecificationDataset',
+            };
+          }
+
+          // Return the car details, including the new fields and match percentage
+          return {
+            carModel,
+            version,
+            carColor, // Added car color
+            matchPercentage, // Add match percentage
+            exShowroomPrice: carSpec['Ex-Showroom Price'] || 'N/A',
+            fuelType: carSpec['Fuel Type'] || 'N/A',
+            transmissionType: carSpec['Transmission Type'] || 'N/A',
+            bodyType: carSpec['Body Type'] || 'N/A',
+            seatingCapacity: carSpec['Seating Capacity'] || 'N/A',
+            emissionStandard: carSpec['Emission Standard'] || 'N/A',
+            ncapRatingAdult: carSpec['NCAP Rating (Adult) (Star (Global NCAP))'] || 'N/A',
+            ncapRatingChild: carSpec['NCAP Rating (Child) (Star (Global NCAP))'] || 'N/A',
+            groundClearance: carSpec['Ground Clearance (cm)'] || 'N/A',
+            fuelTankCapacity: carSpec['Fuel Tank Capacity'] || 'N/A',
+            bootSpaceCapacity: carSpec['Bootspace(litres)'] || 'N/A',
+            drivingRange: carSpec['Driving Range (km)'] || 'N/A',
+            engineType: carSpec['Engine Type'] || 'N/A',
+            engine: carSpec['Engine Power (cc)'] || 'N/A',
+            mileage: carSpec['Mileage (ARAI) (kmpl)'] || 'N/A',
+            topSpeed: carSpec['Top Speed (kmph)'] || 'N/A',
+            wheels: carSpec['Wheels'] || 'N/A',
+            parkingAssist: carSpec['Parking Assist'] || 'N/A',
+            driveModes: carSpec['Drive Modes'] || 'N/A',
+            headlights: carSpec['Headlights'] || 'N/A',
+            airConditioner: carSpec['Air Conditioner'] || 'N/A',
+            display: carSpec['Display'] || 'N/A',
+            headUnitSize: carSpec['Head Unit Size(inch)'] || 'N/A'
+          };
+        } catch (err) {
+          console.error(`Error fetching car details for ${carModel} - ${version}:`, err);
+          return {
+            carModel,
+            version,
+            carColor,  // Added car color
+            matchPercentage,
+            details: 'Error fetching car details',
+          };
+        }
       })
     );
 
-    // Return the detailed car information to the frontend
-    return NextResponse.json({ top4Recommendations: detailedCarInfo });
+    // Return the details of the top 4 recommended cars
+    return NextResponse.json({ success: true, data: carDetails });
   } catch (error) {
-    console.error('Error fetching recommendations:', error);
-    return NextResponse.json({ error: 'Internal Server Error', message: error.message }, { status: 500 });
+    console.error('Error fetching top 4 recommendations:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
