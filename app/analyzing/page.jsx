@@ -9,7 +9,7 @@ const AnalyzingPage = () => {
   useEffect(() => {
     // Automatically move to the next page after the animation is done (5 seconds for demo)
     const timer = setTimeout(() => {
-      router.push("/resultPage"); // Change this to the final page after analysis is done
+      router.push("/recommendationPage"); // Change this to the final page after analysis is done
     }, 5000);
 
     return () => clearTimeout(timer);

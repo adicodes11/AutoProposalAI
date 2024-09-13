@@ -3,19 +3,19 @@ import CustomerRequirementInput from '@/models/CustomerRequirementInput';
 import { ConnectDB } from '@/lib/config/db';
 
 export async function POST(req) {
-  const { fuelType, transmissionType, drivingRange, seatingCapacity } = await req.json();
+  const { fuelType, transmissionType, drivingRange, seatingCapacity, sessionId } = await req.json();
 
   // Validate required fields
-  if (!fuelType || !seatingCapacity) {
-    return NextResponse.json({ error: 'Fuel type and seating capacity are required.' }, { status: 400 });
+  if (!fuelType || !seatingCapacity || !sessionId) {
+    return NextResponse.json({ error: 'Fuel type, seating capacity, and sessionId are required.' }, { status: 400 });
   }
 
   try {
     await ConnectDB();
 
-    // Find the most recent document and update it
+    // Find the document with the given sessionId and update it
     const result = await CustomerRequirementInput.findOneAndUpdate(
-      {},  // Empty filter object to find the most recent document
+      { sessionId },  // Filter by sessionId to find the correct document
       {
         fuelType,
         transmissionType,
@@ -27,7 +27,7 @@ export async function POST(req) {
     );
 
     if (!result) {
-      return NextResponse.json({ error: 'No record found to update.' }, { status: 404 });
+      return NextResponse.json({ error: 'No record found with the given sessionId.' }, { status: 404 });
     }
 
     return NextResponse.json({ success: true, data: result });

@@ -1,15 +1,13 @@
-// G:/FY Project/AutoProposalAI/app/api/requirementPagesRoutes/requirement2Route/route.js
-
 import { NextResponse } from 'next/server';
 import CustomerRequirementInput from '@/models/CustomerRequirementInput';
 import { ConnectDB } from '@/lib/config/db';
 
 export async function POST(req) {
-  const { bodyStyle } = await req.json();
+  const { bodyStyle, sessionId } = await req.json();
 
   // Validation: Ensure required fields are present
-  if (!bodyStyle) {
-    return NextResponse.json({ error: 'Missing body style.' }, { status: 400 });
+  if (!bodyStyle || !sessionId) {
+    return NextResponse.json({ error: 'Missing body style or session ID.' }, { status: 400 });
   }
 
   try {
@@ -22,16 +20,16 @@ export async function POST(req) {
       updatedAt: new Date(),
     };
 
-    // Find the most recent record and update it with body style
+    // Find the customer requirement by sessionId and update the bodyStyle
     const result = await CustomerRequirementInput.findOneAndUpdate(
-      {}, // Empty filter object to find the most recent document
-      updateData, // Fields to update
-      { sort: { createdAt: -1 }, new: true } // Sort by the most recent createdAt and return the updated document
+      { sessionId },  // Use sessionId to find the correct document
+      updateData,     // Fields to update
+      { new: true }   // Return the updated document
     );
 
     // If no document is found, return an appropriate error
     if (!result) {
-      return NextResponse.json({ error: 'No record found to update.' }, { status: 404 });
+      return NextResponse.json({ error: 'No record found for the session.' }, { status: 404 });
     }
 
     // Return the updated document

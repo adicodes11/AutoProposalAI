@@ -180,6 +180,13 @@ const DetailedRequirement1 = () => {
       }
     }
 
+    // Retrieve sessionId from sessionStorage
+    const sessionId = sessionStorage.getItem("sessionId");
+    if (!sessionId) {
+      alert("Session expired. Please sign in again.");
+      return;
+    }
+
     const body = {
       ...answers,
       fuelType: sessionStorage.getItem("fuelType"),
@@ -196,6 +203,7 @@ const DetailedRequirement1 = () => {
       fuelTankCapacityMax,
       bootSpaceMin,
       bootSpaceMax,
+      sessionId, // Include the sessionId in the form data
     };
 
     try {

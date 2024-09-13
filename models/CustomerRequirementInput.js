@@ -9,7 +9,7 @@ const CustomerRequirementInputSchema = new mongoose.Schema({
   fuelType: { type: String },
   transmissionType: { type: String },
   drivingRange: { type: String },
-  seatingCapacity: { type: String },
+  seatingCapacity: { type: Number },
   primaryUse: { type: String },
   carColor: { type: String },
 

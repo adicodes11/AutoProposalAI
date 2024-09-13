@@ -11,7 +11,9 @@ const Requirement3 = () => {
   const [seatingCapacity, setSeatingCapacity] = useState('');
   const router = useRouter();
 
-  // Load previous selections from sessionStorage
+  // Load sessionId and previous selections from sessionStorage
+  const sessionId = sessionStorage.getItem('sessionId');
+
   useEffect(() => {
     const storedFuelType = sessionStorage.getItem('fuelType');
     const storedTransmissionType = sessionStorage.getItem('transmissionType');
@@ -45,10 +47,21 @@ const Requirement3 = () => {
   };
 
   const handleSubmit = async () => {
+    if (!sessionId) {
+      alert('Session not found. Please log in.');
+      return;
+    }
+
     const response = await fetch('/api/requirementPagesRoutes/requirement3Route', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fuelType, transmissionType, drivingRange, seatingCapacity }),
+      body: JSON.stringify({ 
+        fuelType, 
+        transmissionType, 
+        drivingRange, 
+        seatingCapacity, 
+        sessionId  // Pass sessionId to the backend
+      }),
     });
 
     if (response.ok) {

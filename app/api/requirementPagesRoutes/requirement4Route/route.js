@@ -4,11 +4,11 @@ import CustomerRequirementInput from '@/models/CustomerRequirementInput';
 import { ConnectDB } from '@/lib/config/db';
 
 export async function POST(req) {
-  const { primaryUse, carColor } = await req.json();
+  const { primaryUse, carColor, sessionId } = await req.json();
 
   // Validation: Ensure required fields are present
-  if (!primaryUse || !carColor) {
-    return NextResponse.json({ error: 'Primary use and car color are required.' }, { status: 400 });
+  if (!primaryUse || !carColor || !sessionId) {
+    return NextResponse.json({ error: 'Primary use, car color, and sessionId are required.' }, { status: 400 });
   }
 
   try {
@@ -21,10 +21,10 @@ export async function POST(req) {
       updatedAt: new Date(),
     };
 
-    // Find the most recent document and update it
+    // Find the document by sessionId and update it
     const result = await CustomerRequirementInput.findOneAndUpdate(
-      {},  // Empty filter object to find the most recent document
-      updateData, // Fields to update
+      { sessionId },  // Filter by sessionId
+      updateData,     // Fields to update
       { sort: { createdAt: -1 }, new: true } // Sort by the most recent createdAt and return the updated document
     );
 
@@ -33,6 +33,7 @@ export async function POST(req) {
       const newDocument = await CustomerRequirementInput.create({
         primaryUse,
         carColor,
+        sessionId,   // Store the sessionId in the new document
         createdAt: new Date(),
       });
 

@@ -11,7 +11,9 @@ const Requirement2 = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
-  // Load previous selections from sessionStorage
+  // Load sessionId and previous selections from sessionStorage
+  const sessionId = sessionStorage.getItem('sessionId');
+  
   useEffect(() => {
     const storedStyles = JSON.parse(sessionStorage.getItem('bodyStyles')) || [];
     setSelectedStyles(storedStyles);
@@ -34,11 +36,16 @@ const Requirement2 = () => {
 
     setIsSubmitting(true);
 
+    if (!sessionId) {
+      alert('Session not found. Please log in.');
+      return;
+    }
+
     try {
       const response = await fetch('/api/requirementPagesRoutes/requirement2Route', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bodyStyle: selectedStyles }),
+        body: JSON.stringify({ bodyStyle: selectedStyles, sessionId }), // Include sessionId
       });
 
       if (response.ok) {
@@ -109,7 +116,7 @@ const Requirement2 = () => {
           className="px-6 py-2 border border-red-700 rounded-md text-white font-bold bg-red-700 hover:bg-red-800"
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Next' : 'Next'}
+          {isSubmitting ? 'Submitting...' : 'Next'}
         </button>
       </div>
       <Footer2 />

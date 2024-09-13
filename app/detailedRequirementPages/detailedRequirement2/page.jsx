@@ -71,12 +71,16 @@ const DetailedRequirement2 = () => {
     }
   }, []);
 
+  // Load saved answers from session storage
   useEffect(() => {
-    const storedAnswers = JSON.parse(sessionStorage.getItem("detailedAnswers2")) || {};
+    const storedAnswers = JSON.parse(
+      sessionStorage.getItem("detailedAnswers2")
+    ) || {};
     setAnswers(storedAnswers);
     calculateProgress();
   }, []);
 
+  // Save answers in session storage on change
   useEffect(() => {
     sessionStorage.setItem("detailedAnswers2", JSON.stringify(answers));
     calculateProgress();
@@ -122,9 +126,18 @@ const DetailedRequirement2 = () => {
   };
 
   const handleSubmit = async () => {
+    // Retrieve sessionId from sessionStorage
+    const sessionId = sessionStorage.getItem("sessionId");
+
+    if (!sessionId) {
+      alert("Session expired. Please sign in again.");
+      return;
+    }
+
     const body = {
       ...answers,
       fuelType: sessionStorage.getItem("fuelType"),
+      sessionId, // Include sessionId in the request body
     };
 
     try {
@@ -149,20 +162,43 @@ const DetailedRequirement2 = () => {
       const { requirementId } = result; // Get the requirementId from the response
 
       // Step 2: Call the Flask API for recommendations using the requirementId
-      const recommendationResponse = await fetch("http://localhost:5000/recommendations", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ _id: requirementId }), // Pass the requirementId to Flask API
-      });
+      const recommendationResponse = await fetch(
+        "http://localhost:5000/recommendations",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ _id: requirementId, sessionId }), // Pass the requirementId and sessionId to Flask API
+        }
+      );
 
       if (recommendationResponse.ok) {
         const recommendationData = await recommendationResponse.json();
         console.log("Recommendations:", recommendationData);
         alert("Recommendations generated successfully!");
-        // Redirect to the analyzing page
-        router.push("/analyzing");
+
+        // Step 3: Call the new API to calculate the match percentage
+        const matchResponse = await fetch(
+          "/api/recommendationRoutes/recommendationMatchRoute",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ requirementId, sessionId }), // Include requirementId and sessionId
+          }
+        );
+
+        if (matchResponse.ok) {
+          const matchResult = await matchResponse.json();
+          console.log("Match percentage calculation successful:", matchResult);
+
+          // Redirect to the analyzing page
+          router.push("/analyzing");
+        } else {
+          alert("Error calculating match percentage. Please try again.");
+        }
       } else {
         alert("Error generating recommendations. Please try again.");
       }
@@ -292,7 +328,9 @@ const DetailedRequirement2 = () => {
                         name="fogLights"
                         value={option}
                         checked={answers.fogLights === option}
-                        onChange={() => handleAnswerChange("fogLights", option)}
+                        onChange={() =>
+                          handleAnswerChange("fogLights", option)
+                        }
                         className="mr-2"
                       />
                       {option}
@@ -302,7 +340,9 @@ const DetailedRequirement2 = () => {
 
                 {/* Daytime Running Lights */}
                 <div className="space-y-2">
-                  <h3 className="font-semibold text-lg">Daytime Running Lights:</h3>
+                  <h3 className="font-semibold text-lg">
+                    Daytime Running Lights:
+                  </h3>
                   {["Halogen", "LED"].map((option) => (
                     <label
                       key={option}
@@ -336,7 +376,9 @@ const DetailedRequirement2 = () => {
                         name="headlights"
                         value={option}
                         checked={answers.headlights === option}
-                        onChange={() => handleAnswerChange("headlights", option)}
+                        onChange={() =>
+                          handleAnswerChange("headlights", option)
+                        }
                         className="mr-2"
                       />
                       {option}
@@ -346,7 +388,9 @@ const DetailedRequirement2 = () => {
 
                 {/* Automatic Headlamps */}
                 <div className="space-y-2">
-                  <h3 className="font-semibold text-lg">Automatic Headlamps:</h3>
+                  <h3 className="font-semibold text-lg">
+                    Automatic Headlamps:
+                  </h3>
                   {["Yes", "No"].map((option) => (
                     <label
                       key={option}
@@ -369,7 +413,9 @@ const DetailedRequirement2 = () => {
 
                 {/* Follow-Me-Home Headlamps */}
                 <div className="space-y-2">
-                  <h3 className="font-semibold text-lg">Follow-Me-Home Headlamps:</h3>
+                  <h3 className="font-semibold text-lg">
+                    Follow-Me-Home Headlamps:
+                  </h3>
                   {["Yes", "No"].map((option) => (
                     <label
                       key={option}
@@ -379,9 +425,14 @@ const DetailedRequirement2 = () => {
                         type="radio"
                         name="followMeHomeHeadlamps"
                         value={option}
-                        checked={answers.followMeHomeHeadlamps === option}
+                        checked={
+                          answers.followMeHomeHeadlamps === option
+                        }
                         onChange={() =>
-                          handleAnswerChange("followMeHomeHeadlamps", option)
+                          handleAnswerChange(
+                            "followMeHomeHeadlamps",
+                            option
+                          )
                         }
                         className="mr-2"
                       />
@@ -499,7 +550,8 @@ const DetailedRequirement2 = () => {
               </h2>
               <div className="mb-6">
                 <h3 className="text-xl font-semibold mb-2">
-                  Any additional features or specifications that are important to you?
+                  Any additional features or specifications that are important
+                  to you?
                 </h3>
                 <textarea
                   value={answers.additionalFeatures}
@@ -528,13 +580,15 @@ const DetailedRequirement2 = () => {
 
               <div className="mb-6">
                 <h3 className="text-xl font-semibold mb-2">
-                  Are you interested in options for extended warranties or service packages?
+                  Are you interested in options for extended warranties or
+                  service packages?
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
                   {["Yes", "No"].map((option) => (
                     <label
                       key={option}
-                      className="block bg-gray-50 p-4 rounded-md shadow hover:bg-gray-100 transition-all">
+                      className="block bg-gray-50 p-4 rounded-md shadow hover:bg-gray-100 transition-all"
+                    >
                       <input
                         type="radio"
                         name="extendedWarranty"
@@ -555,13 +609,15 @@ const DetailedRequirement2 = () => {
 
               <div className="mb-6">
                 <h3 className="text-xl font-semibold mb-2">
-                  Would you like assistance with vehicle registration and insurance options?
+                  Would you like assistance with vehicle registration and
+                  insurance options?
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
                   {["Yes", "No"].map((option) => (
                     <label
                       key={option}
-                      className="block bg-gray-50 p-4 rounded-md shadow hover:bg-gray-100 transition-all">
+                      className="block bg-gray-50 p-4 rounded-md shadow hover:bg-gray-100 transition-all"
+                    >
                       <input
                         type="radio"
                         name="registrationInsurance"
@@ -586,12 +642,14 @@ const DetailedRequirement2 = () => {
           <div className="mt-12 flex justify-between">
             <button
               onClick={handleBack}
-              className="flex items-center px-6 py-2 border border-blue-700 rounded-md text-blue-700 font-bold bg-blue-100 hover:bg-blue-200 transition-all">
+              className="flex items-center px-6 py-2 border border-blue-700 rounded-md text-blue-700 font-bold bg-blue-100 hover:bg-blue-200 transition-all"
+            >
               Back
             </button>
             <button
               onClick={handleNext}
-              className="px-6 py-2 border border-red-700 rounded-md text-white font-bold bg-red-700 hover:bg-red-800 transition-all">
+              className="px-6 py-2 border border-red-700 rounded-md text-white font-bold bg-red-700 hover:bg-red-800 transition-all"
+            >
               {currentSection === 4 ? "Submit" : "Next"}
             </button>
           </div>

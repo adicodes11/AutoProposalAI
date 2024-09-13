@@ -44,11 +44,18 @@ const Requirement4 = () => {
       return;
     }
 
+    const sessionId = sessionStorage.getItem('sessionId'); // Retrieve the sessionId from sessionStorage
+
+    if (!sessionId) {
+      alert('Session expired. Please sign in again.');
+      return;
+    }
+
     try {
       const response = await fetch('/api/requirementPagesRoutes/requirement4Route', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ primaryUse, carColor }),
+        body: JSON.stringify({ primaryUse, carColor, sessionId }), // Include sessionId in the request
       });
 
       if (response.ok) {
