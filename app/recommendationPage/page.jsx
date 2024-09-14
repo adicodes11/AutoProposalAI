@@ -300,97 +300,97 @@ const RecommendedCars = () => {
             </thead>
             <tbody>
               <tr>
-                <td className="border border-gray-300 p-3">1. Emission Standard</td>
+                <td className="border border-gray-300 p-3 font-bold">Emission Standard</td>
                 {(loading ? placeholderData : top4Recommendations).map((car, index) => (
                   <td key={index} className="border border-gray-300 p-3">{car.emissionStandard}</td>
                 ))}
               </tr>
               <tr>
-                <td className="border border-gray-300 p-3">2. NCAP Rating</td>
+                <td className="border border-gray-300 p-3 font-bold">NCAP Rating</td>
                 {(loading ? placeholderData : top4Recommendations).map((car, index) => (
                   <td key={index} className="border border-gray-300 p-3">{car.ncapRating} Stars</td>
                 ))}
               </tr>
               <tr>
-                <td className="border border-gray-300 p-3">3. Body Style</td>
+                <td className="border border-gray-300 p-3 font-bold">Body Style</td>
                 {(loading ? placeholderData : top4Recommendations).map((car, index) => (
                   <td key={index} className="border border-gray-300 p-3">{car.bodyType}</td>
                 ))}
               </tr>
               <tr>
-                <td className="border border-gray-300 p-3">4. Ground Clearance</td>
+                <td className="border border-gray-300 p-3 font-bold">Ground Clearance</td>
                 {(loading ? placeholderData : top4Recommendations).map((car, index) => (
                   <td key={index} className="border border-gray-300 p-3">{car.groundClearance}</td>
                 ))}
               </tr>
               <tr>
-                <td className="border border-gray-300 p-3">5. Fuel Tank Capacity</td>
+                <td className="border border-gray-300 p-3 font-bold">Fuel Tank Capacity</td>
                 {(loading ? placeholderData : top4Recommendations).map((car, index) => (
                   <td key={index} className="border border-gray-300 p-3">{car.fuelTankCapacity}</td>
                 ))}
               </tr>
               <tr>
-                <td className="border border-gray-300 p-3">6. Boot Space Capacity</td>
+                <td className="border border-gray-300 p-3 font-bold">Boot Space Capacity</td>
                 {(loading ? placeholderData : top4Recommendations).map((car, index) => (
                   <td key={index} className="border border-gray-300 p-3">{car.bootSpaceCapacity}</td>
                 ))}
               </tr>
               <tr>
-                <td className="border border-gray-300 p-3">7. Driving Range</td>
+                <td className="border border-gray-300 p-3 font-bold">Driving Range</td>
                 {(loading ? placeholderData : top4Recommendations).map((car, index) => (
                   <td key={index} className="border border-gray-300 p-3">{car.drivingRange}</td>
                 ))}
               </tr>
               <tr>
-                <td className="border border-gray-300 p-3">8. Engine Type</td>
+                <td className="border border-gray-300 p-3 font-bold">Engine Type</td>
                 {(loading ? placeholderData : top4Recommendations).map((car, index) => (
                   <td key={index} className="border border-gray-300 p-3">{car.engineType}</td>
                 ))}
               </tr>
               <tr>
-                <td className="border border-gray-300 p-3">9. Top Speed</td>
+                <td className="border border-gray-300 p-3 font-bold">Top Speed</td>
                 {(loading ? placeholderData : top4Recommendations).map((car, index) => (
                   <td key={index} className="border border-gray-300 p-3">{car.topSpeed}</td>
                 ))}
               </tr>
               <tr>
-                <td className="border border-gray-300 p-3">10. Wheels</td>
+                <td className="border border-gray-300 p-3 font-bold">Wheels</td>
                 {(loading ? placeholderData : top4Recommendations).map((car, index) => (
                   <td key={index} className="border border-gray-300 p-3">{car.wheels}</td>
                 ))}
               </tr>
               <tr>
-                <td className="border border-gray-300 p-3">11. Parking Assists</td>
+                <td className="border border-gray-300 p-3 font-bold">Parking Assists</td>
                 {(loading ? placeholderData : top4Recommendations).map((car, index) => (
                   <td key={index} className="border border-gray-300 p-3">{car.parkingAssist}</td>
                 ))}
               </tr>
               <tr>
-                <td className="border border-gray-300 p-3">12. Drive Modes</td>
+                <td className="border border-gray-300 p-3 font-bold">Drive Modes</td>
                 {(loading ? placeholderData : top4Recommendations).map((car, index) => (
                   <td key={index} className="border border-gray-300 p-3">{car.driveModes}</td>
                 ))}
               </tr>
               <tr>
-                <td className="border border-gray-300 p-3">13. Headlights</td>
+                <td className="border border-gray-300 p-3 font-bold">Headlights</td>
                 {(loading ? placeholderData : top4Recommendations).map((car, index) => (
                   <td key={index} className="border border-gray-300 p-3">{car.headlights}</td>
                 ))}
               </tr>
               <tr>
-                <td className="border border-gray-300 p-3">14. Air Conditioner</td>
+                <td className="border border-gray-300 p-3 font-bold">Air Conditioner</td>
                 {(loading ? placeholderData : top4Recommendations).map((car, index) => (
                   <td key={index} className="border border-gray-300 p-3">{car.airConditioner}</td>
                 ))}
               </tr>
               <tr>
-                <td className="border border-gray-300 p-3">15. Display</td>
+                <td className="border border-gray-300 p-3 font-bold">Display</td>
                 {(loading ? placeholderData : top4Recommendations).map((car, index) => (
                   <td key={index} className="border border-gray-300 p-3">{car.display}</td>
                 ))}
               </tr>
               <tr>
-                <td className="border border-gray-300 p-3">16. Head unit size</td>  
+                <td className="border border-gray-300 p-3 font-bold">Head unit size</td>  
                 {(loading ? placeholderData : top4Recommendations).map((car, index) => (
                   <td key={index} className="border border-gray-300 p-3">{car.headUnitSize}</td>
                 ))}

@@ -365,8 +365,7 @@ const DetailedRequirement1 = () => {
             {/* Drive Modes */}
             <div className={`${currentSection === 1 ? "block" : "hidden"}`}>
               <h2 className="text-3xl font-bold mt-8 text-gray-700 flex items-center">
-                Which of the following drive modes are available in the car you
-                are interested in?
+                Which of the following drive modes are you interested in?
                 <HelperIcon imageSrc={assets.logo} />
               </h2>
               <div className="grid grid-cols-2 gap-4 mt-4">
@@ -720,7 +719,7 @@ const DetailedRequirement1 = () => {
               onClick={handleNext}
               className="px-6 py-2 border border-red-700 rounded-md text-white font-bold bg-red-700 hover:bg-red-800 transition-all"
             >
-              {currentSection === 4 ? "Submit" : "Next"}
+              {currentSection === 4 ? "Next" : "Next"}
             </button>
           </div>
         </div>

@@ -29,6 +29,15 @@ const Requirement3 = () => {
   const handleFuelTypeChange = (type) => {
     setFuelType(type);
     sessionStorage.setItem('fuelType', type); // Save to sessionStorage
+
+    // If the fuel type is Electric, automatically set the transmission to "Automatic"
+    if (type === 'Electric') {
+      setTransmissionType('Automatic');
+      sessionStorage.setItem('transmissionType', 'Automatic');
+    } else {
+      setTransmissionType(''); // Reset transmission for other fuel types
+      sessionStorage.setItem('transmissionType', ''); // Ensure the sessionStorage is reset
+    }
   };
 
   const handleTransmissionTypeChange = (type) => {
@@ -52,12 +61,13 @@ const Requirement3 = () => {
       return;
     }
 
+    // Submit form with fuelType, transmissionType, drivingRange, and seatingCapacity
     const response = await fetch('/api/requirementPagesRoutes/requirement3Route', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
         fuelType, 
-        transmissionType, 
+        transmissionType,  // Ensure transmissionType is passed to the backend
         drivingRange, 
         seatingCapacity, 
         sessionId  // Pass sessionId to the backend
@@ -95,7 +105,7 @@ const Requirement3 = () => {
           </div>
         </div>
 
-        {/* Question 2: Transmission Type (Conditional) */}
+        {/* Question 2: Transmission Type (for non-Electric vehicles) */}
         {fuelType && fuelType !== 'Electric' && (
           <div className="mb-8">
             <h2 className="text-xl font-bold mb-4 text-center">What transmission type do you prefer?</h2>
@@ -115,7 +125,16 @@ const Requirement3 = () => {
           </div>
         )}
 
-        {/* Question 2 for Electric Car: Driving Range */}
+        {/* Transmission Type Auto-set for Electric */}
+        {fuelType === 'Electric' && (
+          <div className="mb-8">
+            <h2 className="text-xl font-bold mb-4 text-center">
+              Transmission Type: Automatic (Auto-selected for Electric Cars)
+            </h2>
+          </div>
+        )}
+
+        {/* Question 3 for Electric Car: Driving Range */}
         {fuelType === 'Electric' && (
           <div className="mb-8">
             <h2 className="text-xl font-bold mb-4 text-center">
@@ -137,7 +156,7 @@ const Requirement3 = () => {
           </div>
         )}
 
-        {/* Question 3: Seating Capacity */}
+        {/* Question 4: Seating Capacity */}
         {(fuelType && (transmissionType || drivingRange)) && (
           <div className="mb-8">
             <h2 className="text-xl font-bold mb-4 text-center">What is the ideal seating capacity you need in your car?</h2>
