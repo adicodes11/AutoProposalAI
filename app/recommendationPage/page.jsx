@@ -203,7 +203,7 @@ const RecommendedCars = () => {
 
   // Handle navigation to the generate proposal page
   const handleGenerateProposal = (carModel) => {
-    router.push(`/generateProposal?carModel=${encodeURIComponent(carModel)}`);
+    router.push(`/generating?carModel=${encodeURIComponent(carModel)}`);
   };
 
   return (
