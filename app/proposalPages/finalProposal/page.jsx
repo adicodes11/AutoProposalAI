@@ -4,14 +4,11 @@ import React, { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import Footer2 from '@/components/Footer2';
 import logo from '/assets/logo.png';  // Update with your actual logo path
-import { useRouter } from 'next/navigation';  // Import useRouter from next/navigation
 
 const PreviewProposal = () => {
   const [proposalData, setProposalData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const router = useRouter();  // Initialize router
 
   // Reference to the proposal content that will be printed
   const printRef = useRef();
@@ -45,16 +42,6 @@ const PreviewProposal = () => {
     window.print();
     document.body.innerHTML = originalContent;
     window.location.reload();  // Reload to restore the original content
-  };
-
-  // Navigate to the validateProposal page
-  const handleValidate = () => {
-    router.push('/validateProposal');  // Use router to navigate to the validateProposal page
-  };
-
-  // Navigate to the recommendation page
-  const handleBack = () => {
-    router.push('/recommendationPage');  // Navigate to the recommendation page
   };
 
   // Get current date and time for footer
@@ -306,23 +293,13 @@ const PreviewProposal = () => {
         </div>
       </div>
 
-      {/* Button Container */}
-      <div className="flex justify-between w-full max-w-4xl mt-6">
-        {/* Back Button */}
-        <button
-          onClick={handleBack}
-          className="px-8 py-3 text-lg font-semibold text-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-100 transition duration-300"
-        >
-          Back to Recommendation
-        </button>
-        {/* Validate Proposal Button */}
-        <button
-          onClick={handleValidate}  // Change from handlePrint to handleValidate
-          className="px-4 py-2 border border-blue-500 rounded-md text-white font-bold bg-blue-500 hover:bg-blue-600"
-        >
-          Validate Proposal
-        </button>
-      </div>
+      {/* Button to trigger the print function */}
+      <button
+        onClick={handlePrint}
+        className="mt-6 px-4 py-2 border border-blue-500 rounded-md text-white font-bold bg-blue-500 hover:bg-blue-600"
+      >
+        Download Proposal
+      </button>
     </div>
   );
 };
