@@ -10,7 +10,7 @@ const GeneratingProposal = () => {
     // Automatically navigate to the next page after 5 seconds
     const timer = setTimeout(() => {
       router.push("/proposalPages/previewProposal");    // to be changed later
-    }, 5000);
+    }, 20000);
 
     return () => clearTimeout(timer); // Cleanup timer on unmount
   }, [router]);
@@ -47,7 +47,7 @@ const GeneratingProposal = () => {
             <div className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500" 
                  style={{
                    width: '0%', 
-                   animation: 'progress 5s ease-in-out forwards'
+                   animation: 'progress 20s ease-in-out forwards'
                  }}>
             </div>
           </div>

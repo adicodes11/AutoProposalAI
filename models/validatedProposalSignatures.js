@@ -1,21 +1,25 @@
 import mongoose from 'mongoose';
 
 const ValidatedProposalSignatureSchema = new mongoose.Schema({
-  fullName: {
+  signature: {
     type: String,
     required: true,
-  },
-  signature: {
-    type: String, // Storing the base64 string of the signature
-    required: true,
+    validate: {
+      validator: function (value) {
+        const base64StrLength = value.length;
+        const sizeInBytes = (base64StrLength * (3 / 4)) - (value.endsWith('==') ? 2 : value.endsWith('=') ? 1 : 0);
+        return sizeInBytes < 5 * 1024 * 1024;
+      },
+      message: 'Signature size exceeds the allowed limit of 5MB.',
+    },
   },
   sessionId: {
     type: String,
     required: true,
   },
   createdBy: {
-    type: mongoose.Schema.Types.ObjectId, // Assuming this refers to a user model
-    ref: 'User', // Reference to User model
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     required: true,
   },
   createdAt: {
@@ -33,7 +37,8 @@ ValidatedProposalSignatureSchema.pre('save', function (next) {
   next();
 });
 
-const ValidatedProposalSignature = mongoose.models.ValidatedProposalSignature ||
+const ValidatedProposalSignature =
+  mongoose.models.ValidatedProposalSignature ||
   mongoose.model('ValidatedProposalSignature', ValidatedProposalSignatureSchema);
 
 export default ValidatedProposalSignature;

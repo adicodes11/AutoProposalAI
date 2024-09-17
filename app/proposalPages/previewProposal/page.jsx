@@ -9,6 +9,9 @@ const PreviewProposal = () => {
   const [proposalData, setProposalData] = useState(null);
   const [proposalIntroduction, setProposalIntroduction] = useState("");
   const [carOverview, setCarOverview] = useState("");
+  const [customizationSuggestions, setCustomizationSuggestions] = useState("");
+  const [proposalSummary, setProposalSummary] = useState("");
+  const [conclusion, setConclusion] = useState("");
   const [customerRequirements, setCustomerRequirements] = useState(null);
   const [carDetails, setCarDetails] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -58,6 +61,9 @@ const PreviewProposal = () => {
           setGeneratedByEmail(data.generatedByEmail);
           setProposalIntroduction(data.introduction);
           setCarOverview(data.carOverview);
+          setCustomizationSuggestions(data.customizationSuggestions);
+          setProposalSummary(data.proposalSummary);
+          setConclusion(data.conclusion);
           setCustomerRequirements(data.customer_requirements);
           setCarDetails(data.carDetails);
         } else {
@@ -368,14 +374,328 @@ const PreviewProposal = () => {
                 <Image
                   src={getImageName(carDetails.Model, customerRequirements.carColor) || "/path/to/default-car-image.jpg"}
                   alt={carDetails.Model}
-                  width={708}
-                  height={500}
+                  width={885}
+                  height={625}
                   className="object-contain"
                 />
               </div>
             </div>
           </>
         )}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        {/* Key Features Section */}
+        {/* {carDetails && (
+          <>
+            <hr className="border-t border-blue-600 mb-4" />
+            <div className="flex justify-left mb-4">
+            </div>
+            <div className="flex flex-wrap mb-4">
+              <div className="w-full md:w-full pr-4">
+                <h3 className="text-lg font-semibold mb-2">E.Key Features</h3>
+                <table className="table-auto w-full border-collapse border border-gray-300">
+                  <tbody>
+                    <tr>
+                      <td className="font-semibold border border-gray-300 p-1">Price</td>
+                      <td className="border border-gray-300 p-1">
+                        ₹{carDetails["Ex-Showroom Price"] || "N/A"}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="font-semibold border border-gray-300 p-1">Fuel type</td>
+                      <td className="border border-gray-300 p-1">
+                        {carDetails["Fuel Type"]}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="font-semibold border border-gray-300 p-1">
+                        Transmission type
+                      </td>
+                      <td className="border border-gray-300 p-1">
+                        {carDetails["Transmission Type"]}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="font-semibold border border-gray-300 p-1">Car type</td>
+                      <td className="border border-gray-300 p-1">{carDetails["Body Type"]}</td>
+                    </tr>
+                    <tr>
+                      <td className="font-semibold border border-gray-300 p-1">Mileage</td>
+                      <td className="border border-gray-300 p-1">
+                        {carDetails["Mileage (ARAI) (kmpl)"]} KMPL
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="font-semibold border border-gray-300 p-1">Engine</td>
+                      <td className="border border-gray-300 p-1">
+                        {carDetails["Engine Power (cc)"]} CC,{" "}
+                        {carDetails["Engine Specification"]}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="font-semibold border border-gray-300 p-1">Safety</td>
+                      <td className="border border-gray-300 p-1">
+                        {carDetails["NCAP Rating (Adult) (Star (Global NCAP))"]} Star Global
+                        NCAP
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="font-semibold border border-gray-300 p-1">
+                        Emission Standard
+                      </td>
+                      <td className="border border-gray-300 p-1">
+                        {carDetails["Emission Standard"]}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </>
+        )} */}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+        {/* Key Features Section */}        
+        {carDetails && (
+          <>
+            <hr className="border-t border-blue-600 mb-4" />
+            <div className="flex justify-left mb-4">
+              <div className="text-lg font-semibold mb-2" style={{ maxWidth: "fit-content" }}>
+                <h2 className="text-lg font-bold uppercase tracking-wide">E. Key Features</h2>
+              </div>
+            </div>
+            <div className="flex flex-wrap mb-4">
+              <div className="w-full md:w-1/2 pr-4">  
+                <h3 className="text-md font-semibold mb-2">Exterior</h3>
+                <ul className="list-disc ml-6 mb-4">
+                  <li>{carDetails["Headlights"] || "N/A"} with LED DRLs</li>
+                  <li>{carDetails["Roof Rails"] ? "Dual-Tone Roof Rails" : "N/A"}</li>
+                  <li>{carDetails["Turn Indicators on ORVM"] ? "Electrically Adjustable ORVMs with LED Turn Indicators" : "N/A"}</li>
+                  <li>{carDetails["Wheel Size (inch)"] ? `Wheel Covers on ${carDetails["Wheel Size (inch)"]}-inch Steel Wheels` : "N/A"}</li>
+                </ul>
+
+                <h3 className="text-md font-semibold mb-2">Comfort & Convenience</h3>
+                <ul className="list-disc ml-6 mb-4">
+                  <li>{carDetails["Automatic Climate Control"] ? "Automatic Climate Control" : "N/A"}</li>
+                  <li>{carDetails["Rear Armrest"] ? "Rear Seat Armrest with Cup Holders" : "N/A"}</li>
+                  <li>{carDetails["Parking Sensors"] ? "Rear Parking Sensors" : "N/A"}</li>
+                  <li>{carDetails["Bootlid Opener"] ? "Electric Tailgate Release" : "N/A"}</li>
+                  <li>{carDetails["Central Locking"] ? "Remote Central Locking" : "N/A"}</li>
+                </ul>
+
+                <h3 className="text-md font-semibold mb-2">Safety</h3>
+                <ul className="list-disc ml-6 mb-4">
+                  <li>{carDetails["Airbags"] ? `Dual Front Airbags (${carDetails["Airbags"]})` : "N/A"}</li>
+                  <li>{carDetails["Anti-Lock Braking System (ABS)"] && carDetails["Electronic Brake-force Distribution (EBD)"] ? "ABS with EBD" : "N/A"}</li>
+                  <li>{carDetails["Electronic Stability Program (ESP)"] ? "Corner Stability Control" : "N/A"}</li>
+                  <li>{carDetails["Child Seat Anchor Points"] ? "ISOFIX Child Seat Mounts" : "N/A"}</li>
+                  <li>{carDetails["Parking Assist"] ? "Reverse Parking Assist" : "N/A"}</li>
+                  <li>{carDetails["Seat Belt Warning"] ? "Seat Belt Reminder (Driver and Co-Driver)" : "N/A"}</li>
+                </ul>
+
+                <h3 className="text-md font-semibold mb-2">Additional Highlights</h3>
+                <ul className="list-disc ml-6 mb-4">
+                  <li>{carDetails["Follow me home headlamps"] ? "Follow-Me-Home Headlamps" : "N/A"}</li>
+                  <li>{carDetails["Drive Modes"] ? `Multi-Drive Modes (${carDetails["Drive Modes"]})` : "N/A"}</li>
+                  {/* <li>Nexon Signature Grille</li> */}
+                  <li>{carDetails["Keyless Start"] ? "Smart Key with Push Button Start" : "N/A"}</li>
+                </ul>
+              </div>
+
+              <div className="w-full md:w-1/2">
+                <h3 className="text-md font-semibold mb-2">Interior</h3>
+                <ul className="list-disc ml-6 mb-4">
+                  <li>{carDetails["Seat Upholstery"] ? `Premium ${carDetails["Seat Upholstery"]} Upholstery` : "N/A"}</li>
+                  <li>{carDetails["Rear AC"] ? "Rear AC Vents" : "N/A"}</li>
+                  <li>{carDetails["Driver Seat Adjustment"] ? "Height Adjustable Driver Seat" : "N/A"}</li>
+                  <li>{carDetails["Steering Adjustment"] ? "Tilt Adjustable Steering Wheel" : "N/A"}</li>
+                  <li>{carDetails["Power Windows"] ? "Front and Rear Power Windows" : "N/A"}</li>
+                </ul>
+
+                <h3 className="text-md font-semibold mb-2">Infotainment</h3>
+                <ul className="list-disc ml-6 mb-4">
+                  <li>{carDetails["Speakers"] ? `Harman-Infotainment System with ${carDetails["Speakers"]} Speakers` : "N/A"}</li>
+                  <li>{carDetails["Steering Mounted Controls"] ? "Steering Mounted Audio Controls" : "N/A"}</li>
+                  <li>{carDetails["USB Compatibility"] && carDetails["Aux Compatibility"] ? "USB and AUX Ports" : "N/A"}</li>
+                  <li>{carDetails["AM/FM Radio"] ? "Radio and MP3 Playback" : "N/A"}</li>
+                </ul>
+
+                <h3 className="text-md font-semibold mb-2">Engine & Performance</h3>
+                <ul className="list-disc ml-6 mb-4">
+                  <li>{carDetails["Engine Type"] ? `Engine Type: ${carDetails["Engine Type"]}` : "N/A"}</li>
+                  <li>{carDetails["Engine Power (cc)"] ? `Displacement: ${carDetails["Engine Power (cc)"]} cc` : "N/A"}</li>
+                  <li>{carDetails["Max Power (bhp)"] && carDetails["Max Power (rpm)"] ? `Power Output: ${carDetails["Max Power (bhp)"]} PS @ ${carDetails["Max Power (rpm)"]} RPM` : "N/A"}</li>
+                  <li>{carDetails["Max Torque (Nm)"] && carDetails["Max Torque (rpm)"] ? `Torque: ${carDetails["Max Torque (Nm)"]} Nm @ ${carDetails["Max Torque (rpm)"]} RPM` : "N/A"}</li>
+                  <li>{carDetails["Transmission Type"] && carDetails["Transmission Specification"] ? `Transmission: ${carDetails["Transmission Type"]}, ${carDetails["Transmission Specification"]}` : "N/A"}</li>
+                </ul>
+
+                <h3 className="text-md font-semibold mb-2">Dimensions & Capacity</h3>
+                <ul className="list-disc ml-6 mb-4">
+                  <li>{carDetails["Length (mm)"] ? `Length: ${carDetails["Length (mm)"]} mm` : "N/A"}</li>
+                  <li>{carDetails["Width(mm)"] ? `Width: ${carDetails["Width(mm)"]} mm` : "N/A"}</li>
+                  <li>{carDetails["Height(mm)"] ? `Height: ${carDetails["Height(mm)"]} mm` : "N/A"}</li>
+                  <li>{carDetails["Wheelbase(mm)"] ? `Wheelbase: ${carDetails["Wheelbase(mm)"]} mm` : "N/A"}</li>
+                  <li>{carDetails["Ground Clearance (cm)"] ? `Ground Clearance: ${carDetails["Ground Clearance (cm)"]} mm` : "N/A"}</li>
+                  <li>{carDetails["Bootspace(litres)"] ? `Boot Space: ${carDetails["Bootspace(litres)"]} liters` : "N/A"}</li>
+                  <li>{carDetails["Fuel Tank Capacity"] ? `Fuel Tank Capacity: ${carDetails["Fuel Tank Capacity"]} liters` : "N/A"}</li>
+                </ul>
+              </div>
+            </div>
+          </>
+        )}
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+        {/* Car Overview Section */}
+        {/* <hr className="border-t border-blue-600 mb-4" />
+        <h2 className="text-lg font-semibold mb-3">E. Customization Suggestions</h2>
+        <p className="mb-4 text-sm leading-relaxed">{customizationSuggestions}</p> */}
+
+
+
+        {/* Car Overview Section */}
+        <hr className="border-t border-blue-600 mb-4" />
+        <h2 className="text-lg font-semibold mb-3">F. Customization Suggestions</h2>
+
+        {/* Properly format and display customization suggestions */}
+        <div className="mb-4 text-sm leading-relaxed">
+          {customizationSuggestions.split('\n').map((line, index) => {
+            // Check if the line is a heading (doesn't start with a number or bullet point)
+            const isHeading = !/^[0-9]/.test(line.trim()) && line.trim().length > 0;
+
+            return (
+              <p
+                key={index}
+                className={`${isHeading ? 'font-bold mb-2' : 'ml-4 mb-1'}`}
+              >
+                {line.trim()}
+              </p>
+            );
+          })}
+        </div>
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+          {/* Financial Overview Section */}
+          <hr className="border-t border-blue-600 mb-4" />
+          <h2 className="text-lg font-semibold mb-3">G. Financial Overview</h2>
+
+          {/* Vehicle Cost Details */}
+          <p className="mb-2 text-sm">
+            <strong>Vehicle Cost (Showroom Price):</strong> ₹{carDetails["Ex-Showroom Price"]} lakhs
+          </p>
+
+          {/* Customization cost (fixed) */}
+          <p className="mb-2 text-sm"><strong>Customization cost:</strong> ₹6,103</p>
+
+          {/* Total cost (calculated as vehicle cost + some fixed value) */}
+          <p className="mb-2 text-sm">
+            <strong>Total Cost:</strong> ₹{(carDetails["Ex-Showroom Price"] + 0.6).toFixed(2)} lakhs (including taxes and fees)
+          </p>
+
+          {/* On-road Price (using the Mumbai field from CarSpecificationDataset) */}
+          <p className="mb-2 text-sm">
+            <strong>On-Road Price:</strong> ₹{carDetails.Mumbai / 100000} lakhs (includes registration, road tax, and insurance)
+          </p>
+
+          {/* Financing Options */}
+          <h3 className="mt-4 mb-2 text-md font-semibold">Financing Options</h3>
+          <table className="table-auto w-full mb-4 border-collapse border border-gray-300">
+            <thead>
+              <tr>
+                <th className="border border-gray-300 p-2">Options</th>
+                <th className="border border-gray-300 p-2">Standard Loan</th>
+                <th className="border border-gray-300 p-2">Flexi Loan</th>
+                <th className="border border-gray-300 p-2">Balloon Payment</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-300 p-2 font-semibold">Intrest Rate</td>
+                <td className="border border-gray-300 p-2">3.5% APR</td>
+                <td className="border border-gray-300 p-2">3.8% APR</td>
+                <td className="border border-gray-300 p-2">3.2% APR</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 p-2 font-semibold">LOAN TERM</td>
+                <td className="border border-gray-300 p-2">5 Years</td>
+                <td className="border border-gray-300 p-2">Up to 7 Years</td>
+                <td className="border border-gray-300 p-2">3 Years</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 p-2 font-semibold">EMI (Estimated Monthly Installment)</td>
+                <td className="border border-gray-300 p-2">₹15,366</td>
+                <td className="border border-gray-300 p-2">₹12,594 (For a 7-year term)</td>
+                <td className="border border-gray-300 p-2">₹14,575 (30% of the total cost at the end of the term)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          {/* Insurance Options */}
+          <h3 className="mt-4 mb-2 text-md font-semibold">Insurance Options</h3>
+          <ul className="list-disc ml-8 mb-4 text-sm">
+            <li>
+              <strong>Comprehensive Insurance:</strong> ₹25,000 per year (includes third-party liability, own damage, and personal accident cover)
+            </li>
+            <li>
+              <strong>Third-Party Insurance:</strong> ₹8,000 per year (minimum legal requirement)
+            </li>
+          </ul>
+
+          {/* Down Payment and Amount Financed */}
+          
+          {/* <h3 className="mt-4 mb-2 text-md font-semibold">Down Payment</h3> */}
+          <table className="table-auto w-full mb-4 border-collapse border border-gray-300">
+          <thead>
+              <tr>
+                <th className="border border-gray-300 p-2">Options</th>
+                <th className="border border-gray-300 p-2">Standard Loan</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-300 p-2 font-semibold">
+                  <ul className="list-disc ml-4 text-sm">
+                    <li>Minimum Down Payment: 20% of On-Road Price</li>
+                    <li>Amount: ₹{(carDetails.Mumbai * 0.2 / 100000).toFixed(2)} lakhs</li>
+                  </ul>
+                </td>
+                <td className="border border-gray-300 p-2">
+                  <ul className="list-disc ml-4 text-sm">
+                    <li><strong>Option 1:</strong> ₹{(carDetails.Mumbai * 0.8 / 100000).toFixed(2)} lakhs</li>
+                    <li><strong>Option 2:</strong> ₹{(carDetails.Mumbai * 0.8 / 100000).toFixed(2)} lakhs</li>
+                    <li><strong>Option 3:</strong> ₹{(carDetails.Mumbai * 0.8 / 100000).toFixed(2)} lakhs (excluding balloon payment)</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          {/* Final Text Part */}
+          <p className="text-sm leading-relaxed">
+            These options provide a range of choices for financing your {carDetails.Model} {carDetails.Version}, allowing flexibility based on your financial preferences and needs. For further details and to choose the best option, please contact our finance team.
+          </p>
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+        {/* Proposal Summary Section */}
+        <hr className="border-t border-blue-600 mb-4" />
+        <h2 className="text-lg font-semibold mb-3">H. Proposal Summary</h2>
+        <p className="mb-4 text-sm leading-relaxed">{proposalSummary}</p>
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+        {/* Conclusion Section */}
+        <hr className="border-t border-blue-600 mb-4" />
+        <h2 className="text-lg font-semibold mb-3">I. Conclusion</h2>
+        <p className="mb-4 text-sm leading-relaxed">{conclusion}</p>
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
 
         {/* Footer Section */}
         <div className="mt-4 pt-4 border-t border-blue-600 text-sm flex justify-between items-center">
@@ -400,12 +720,12 @@ const PreviewProposal = () => {
         </button>
 
         {/* Print Button */}
-        <button
+        {/* <button
           onClick={handlePrint}
           className="px-8 py-2 text-lg font-semibold text-gray-700 border border-gray-400 rounded-lg hover:bg-gray-100 transition duration-300"
         >
           Print Proposal
-        </button>
+        </button> */}
 
         {/* Validate Proposal Button */}
         <button

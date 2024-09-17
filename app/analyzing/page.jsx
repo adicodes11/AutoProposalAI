@@ -32,13 +32,26 @@ const AnalyzingPage = () => {
           Our AI is processing and analyzing all your preferences and requirements.
         </p>
 
-        {/* Progress bar */}
-        <div className="relative pt-1">
-          <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
-            <div className="w-1/2 shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-400 animate-[loading_5s_ease-in-out]"></div>
+        {/* Progress Bar */}
+        <div className="relative pt-1 w-64 mx-auto">
+          <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-700">
+            <div className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500" 
+                 style={{
+                   width: '0%', 
+                   animation: 'progress 5s ease-in-out forwards'
+                 }}>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Inline CSS for the Progress Bar Animation */}
+      <style jsx>{`
+        @keyframes progress {
+          0% { width: 0%; }
+          100% { width: 100%; }
+        }
+      `}</style>
     </div>
   );
 };

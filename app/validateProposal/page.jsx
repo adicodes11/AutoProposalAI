@@ -7,19 +7,30 @@ import "@fontsource/great-vibes"; // Import the font for signature styling
 const REMOVE_BG_API_KEY = 'Y2gzyBQtQrvtHaAdF8ivgPuw'; // Your Remove.bg API key
 
 const ValidateProposalPage = () => {
-  const [fullName, setFullName] = useState("");
-  const [displayedName, setDisplayedName] = useState("");
   const [signatureType, setSignatureType] = useState("");
   const [signature, setSignature] = useState(null);
-  const [isUploading, setIsUploading] = useState(false); // For loading state when processing
-  const [sessionId, setSessionId] = useState("your_session_id"); // Replace this with actual session ID logic
-  const [userId, setUserId] = useState("your_user_id"); // Replace with actual user ID logic
+  const [isUploading, setIsUploading] = useState(false);
+  const [sessionId, setSessionId] = useState("");
+  const [userId, setUserId] = useState("");
+  const [typedSignature, setTypedSignature] = useState("");
   const router = useRouter();
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
 
-  // Adjust the canvas for device pixel ratio
+  useEffect(() => {
+    const storedSessionId = sessionStorage.getItem("sessionId");
+    const storedUserId = sessionStorage.getItem("userId");
+
+    if (storedSessionId && storedUserId) {
+      setSessionId(storedSessionId);
+      setUserId(storedUserId);
+    } else {
+      alert("Session or user information not found. Please log in.");
+      router.push("/signin");
+    }
+  }, [router]);
+
   const adjustCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     if (canvas) {
@@ -109,15 +120,25 @@ const ValidateProposalPage = () => {
   const handleSignatureType = () => {
     setSignatureType("type");
     setSignature(null);
-    setDisplayedName("");
+    setTypedSignature("");
   };
 
-  const handleFullNameInput = (e) => {
-    setFullName(e.target.value);
+  const renderTypedSignatureAsImage = () => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    clearCanvas();
+    ctx.font = "36px 'Great Vibes'";
+    ctx.fillStyle = "#4F46E5";
+    ctx.fillText(typedSignature, 10, 50);
+    const dataURL = canvas.toDataURL("image/png");
+    setSignature(dataURL);
   };
 
-  const displayFullName = () => {
-    setDisplayedName(fullName);
+  const handleTypedSignatureChange = (e) => {
+    setTypedSignature(e.target.value);
+    setTimeout(() => {
+      renderTypedSignatureAsImage();
+    }, 100);
   };
 
   const handleBack = () => {
@@ -129,18 +150,19 @@ const ValidateProposalPage = () => {
       return false;
     } else if (signatureType === "draw" && signature) {
       return false;
-    } else if (signatureType === "type" && displayedName) {
+    } else if (signatureType === "type" && signature) {
       return false;
     }
     return true;
   };
 
   const handleDone = async () => {
-    if (!signature && !displayedName) {
+    if (!signature) {
       alert("Please provide the required signature.");
       return;
     }
 
+    setIsUploading(true);
     try {
       const response = await fetch("/api/validateProposalRoute", {
         method: "POST",
@@ -148,7 +170,6 @@ const ValidateProposalPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          fullName,
           signature,
           sessionId,
           userId,
@@ -156,20 +177,20 @@ const ValidateProposalPage = () => {
       });
 
       const data = await response.json();
-      if (data.success) {
-        alert("Proposal validated!");
-        // Redirect to the final proposal page
+      if (response.ok && data.success) {
+        alert("Proposal validated successfully!");
         router.push("/proposalPages/finalProposal");
       } else {
-        alert("Failed to validate proposal.");
+        throw new Error(data.error || "Failed to validate proposal.");
       }
     } catch (error) {
       console.error("Error validating proposal:", error);
-      alert("An error occurred while validating the proposal.");
+      alert(error.message || "An error occurred while validating the proposal.");
+    } finally {
+      setIsUploading(false);
     }
   };
 
-  // Function to send the uploaded image to Remove.bg API and get the background removed
   const handleImageUpload = async (file) => {
     setIsUploading(true);
     try {
@@ -198,13 +219,6 @@ const ValidateProposalPage = () => {
       alert("An error occurred while uploading the image.");
     } finally {
       setIsUploading(false);
-    }
-  };
-
-  // Prevent scrolling on touch devices when drawing
-  const preventScroll = (e) => {
-    if (signatureType === "draw") {
-      e.preventDefault();
     }
   };
 
@@ -275,13 +289,9 @@ const ValidateProposalPage = () => {
               onMouseDown={startDrawing}
               onMouseUp={finishDrawing}
               onMouseMove={draw}
-              onMouseOut={finishDrawing}
               onTouchStart={startDrawing}
               onTouchEnd={finishDrawing}
               onTouchMove={draw}
-              onTouchCancel={finishDrawing}
-              onTouchStartCapture={preventScroll}
-              onTouchMoveCapture={preventScroll}
             />
             <button
               onClick={clearCanvas}
@@ -296,30 +306,19 @@ const ValidateProposalPage = () => {
           <div className="flex flex-col items-center mb-6">
             <input
               type="text"
-              placeholder="Type your Full Name Here"
-              value={fullName}
-              onChange={handleFullNameInput}
-              onBlur={displayFullName}
+              placeholder="Type your Signature Here"
+              value={typedSignature}
+              onChange={handleTypedSignatureChange}
               className="w-full px-5 py-3 text-lg border border-gray-300 rounded-lg focus:ring focus:ring-indigo-300 focus:outline-none"
             />
-            {displayedName && (
-              <p
-                className="mt-4 text-lg text-center italic text-gray-600"
-                style={{ fontFamily: "Great Vibes, cursive", fontSize: "36px", color: "#4F46E5" }}
-              >
-                {displayedName}
-              </p>
+            <canvas ref={canvasRef} className="hidden"></canvas>
+            {signature && (
+              <img
+                src={signature}
+                alt="Typed Signature Preview"
+                className="mt-4 w-full max-h-64 object-contain rounded-md shadow-lg"
+              />
             )}
-          </div>
-        )}
-
-        {signature && (
-          <div className="mt-6 flex flex-col items-center">
-            <img
-              src={signature}
-              alt="Signature Preview"
-              className="w-full max-h-64 object-contain rounded-md shadow-lg"
-            />
           </div>
         )}
 

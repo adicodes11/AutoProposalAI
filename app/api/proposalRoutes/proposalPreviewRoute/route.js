@@ -84,6 +84,9 @@ export async function POST(req) {
         customer_details: userDetails,
         introduction: aiGeneratedContent.introduction || 'No introduction available',
         carOverview: aiGeneratedContent.carOverview || 'No car overview available',
+        customizationSuggestions: aiGeneratedContent.customizationSuggestions || 'No customization suggestions available',
+        proposalSummary: aiGeneratedContent.proposalSummary || 'No proposal summary available',
+        conclusion: aiGeneratedContent.conclusion || 'No conclusion available',
         customer_requirements: customerRequirements,
         carDetails: carDetails || {},  // Return carDetails even if empty
       },

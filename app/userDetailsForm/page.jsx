@@ -80,6 +80,9 @@ const UserDetailForm = () => {
     };
 
     try {
+      // Redirect to "generating" page immediately after form submission
+      router.push("/generating");
+
       // Step 1: Submit user details to the Next.js API route
       const response = await fetch("/api/userDetailsFormRoute", {
         method: "POST",
@@ -114,7 +117,6 @@ const UserDetailForm = () => {
       if (pythonResponse.ok) {
         const result = await pythonResponse.json();
         console.log("Proposal generated:", result);
-        router.push("/proposalPages/previewProposal");
       } else {
         alert("Error generating the proposal.");
       }
