@@ -157,7 +157,7 @@ const PreviewProposal = () => {
 
         {/* Customer Details Section */}
         <hr className="border-t border-blue-600 mb-4" />
-        <h2 className="text-lg font-semibold mb-3">A. Customer Details</h2>
+        <h2 className="text-lg font-semibold mb-3 uppercase">A. Customer Details</h2>
         <table className="table-auto w-full mb-6 border-collapse border border-gray-300">
           <tbody>
             <tr>
@@ -205,8 +205,8 @@ const PreviewProposal = () => {
 
         {/* Introduction Section */}
         <hr className="border-t border-blue-600 mb-4" />
-        <h2 className="text-lg font-semibold mb-3">B. Introduction</h2>
-        <p className="mb-4 leading-relaxed">{proposalIntroduction}</p>
+        <h2 className="text-lg font-semibold mb-3 uppercase">B. Introduction</h2>
+        <p className="mb-4 leading-relaxed text-sm">{proposalIntroduction}</p>
 
         {/* Customer Requirement Summary Section */}
         <hr className="border-t border-blue-600 mb-4" />
@@ -385,7 +385,7 @@ const PreviewProposal = () => {
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////
         {/* Key Features Section */}
         {/* {carDetails && (
           <>
