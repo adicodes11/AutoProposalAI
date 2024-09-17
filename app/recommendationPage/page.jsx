@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation"; // Use useRouter from next/navigation for app directory
 import Header from "@/components/Header"; // Import Header component
-import Footer from "@/components/Footer";   // Import Footer component
+import Footer from "@/components/Footer"; // Import Footer component
 
 const RecommendedCars = () => {
   const [top4Recommendations, setTop4Recommendations] = useState([]);
@@ -167,7 +167,8 @@ const RecommendedCars = () => {
         if (data.success) {
           setTop4Recommendations(data.data);
           const maxIndex = data.data.reduce(
-            (maxIdx, car, idx, arr) => (car.matchPercentage > arr[maxIdx].matchPercentage ? idx : maxIdx),
+            (maxIdx, car, idx, arr) =>
+              car.matchPercentage > arr[maxIdx].matchPercentage ? idx : maxIdx,
             0
           );
           setMaxMatchIndex(maxIndex); // Find the car with maximum matchPercentage
@@ -197,26 +198,33 @@ const RecommendedCars = () => {
   };
 
   // Handle navigation to the customize car page
-  const handleCustomize = (carModel) => {
-    router.push(`/customizecar?carModel=${encodeURIComponent(carModel)}`);
+  const handleCustomize = (carModel, version) => {
+    sessionStorage.setItem("selectedCarModel", carModel);
+    sessionStorage.setItem("selectedVersion", version);
+    router.push("/customizecar");
   };
 
   // Handle navigation to the generate proposal page
-  const handleGenerateProposal = (carModel) => {
-    router.push(`/generating?carModel=${encodeURIComponent(carModel)}`);
+  const handleGenerateProposal = (carModel, version) => {
+    sessionStorage.setItem("selectedCarModel", carModel);
+    sessionStorage.setItem("selectedVersion", version);
+    router.push("/userDetailsForm");
   };
 
   return (
     <div className="bg-white min-h-screen">
       <Header /> {/* Adding the Header component */}
-      
+
       <div className="container mx-auto p-8">
         <h1 className="text-4xl font-bold mb-10 text-center text-gray-800">Top 4 Recommended Cars</h1>
 
         {/* Top 4 Recommended Cars */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-16">
           {(loading ? placeholderData : top4Recommendations).map((car, index) => (
-            <div key={index} className="bg-white shadow-lg rounded-lg p-6 text-center relative hover:shadow-2xl transition-shadow duration-300">
+            <div
+              key={index}
+              className="bg-white shadow-lg rounded-lg p-6 text-center relative hover:shadow-2xl transition-shadow duration-300"
+            >
               {/* Use getImageName function to get the correct image path */}
               <Image
                 src={getImageName(car.carModel, car.carColor) || "/path/to/default-car-image.jpg"} // Fallback to a default image if needed
@@ -255,7 +263,10 @@ const RecommendedCars = () => {
                 {/* Match Percentage */}
                 <div className="text-sm font-medium text-gray-600 mt-2 text-right">
                   Match Percentage:
-                  <div className="w-full bg-gray-200 rounded-full h-4 mb-2" style={{ width: "100px" }}>
+                  <div
+                    className="w-full bg-gray-200 rounded-full h-4 mb-2"
+                    style={{ width: "100px" }}
+                  >
                     <div
                       className="bg-green-500 h-4 rounded-full"
                       style={{ width: `${car.matchPercentage}%` }}
@@ -268,13 +279,13 @@ const RecommendedCars = () => {
               {/* Customize and Generate Proposal Buttons */}
               <div className="flex justify-center mt-4 space-x-4">
                 <button
-                  onClick={() => handleCustomize(car.carModel)}
+                  onClick={() => handleCustomize(car.carModel, car.version)}
                   className="bg-purple-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-purple-700 transition-colors duration-200"
                 >
                   Customize
                 </button>
                 <button
-                  onClick={() => handleGenerateProposal(car.carModel)}
+                  onClick={() => handleGenerateProposal(car.carModel, car.version)}
                   className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors duration-200"
                 >
                   Generate Proposal
@@ -390,7 +401,7 @@ const RecommendedCars = () => {
                 ))}
               </tr>
               <tr>
-                <td className="border border-gray-300 p-3 font-bold">Head unit size</td>  
+                <td className="border border-gray-300 p-3 font-bold">Head unit size</td>
                 {(loading ? placeholderData : top4Recommendations).map((car, index) => (
                   <td key={index} className="border border-gray-300 p-3">{car.headUnitSize}</td>
                 ))}
@@ -399,7 +410,7 @@ const RecommendedCars = () => {
           </table>
         </div>
       </div>
-      
+
       <Footer /> {/* Adding the Footer component */}
     </div>
   );
