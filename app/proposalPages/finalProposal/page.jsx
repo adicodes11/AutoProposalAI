@@ -14,6 +14,7 @@ const PreviewProposal = () => {
   const [conclusion, setConclusion] = useState("");
   const [customerRequirements, setCustomerRequirements] = useState(null);
   const [carDetails, setCarDetails] = useState(null);
+  const [signature, setSignature] = useState(null); // Add state for the signature
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [PID, setPID] = useState("");
@@ -64,6 +65,7 @@ const PreviewProposal = () => {
           setCustomizationSuggestions(data.customizationSuggestions);
           setProposalSummary(data.proposalSummary);
           setConclusion(data.conclusion);
+          setSignature(data.signature); // Fetch signature
           setCustomerRequirements(data.customer_requirements);
           setCarDetails(data.carDetails);
         } else {
@@ -384,81 +386,6 @@ const PreviewProposal = () => {
         )}
 
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        {/* Key Features Section */}
-        {/* {carDetails && (
-          <>
-            <hr className="border-t border-blue-600 mb-4" />
-            <div className="flex justify-left mb-4">
-            </div>
-            <div className="flex flex-wrap mb-4">
-              <div className="w-full md:w-full pr-4">
-                <h3 className="text-lg font-semibold mb-2">E.Key Features</h3>
-                <table className="table-auto w-full border-collapse border border-gray-300">
-                  <tbody>
-                    <tr>
-                      <td className="font-semibold border border-gray-300 p-1">Price</td>
-                      <td className="border border-gray-300 p-1">
-                        ₹{carDetails["Ex-Showroom Price"] || "N/A"}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="font-semibold border border-gray-300 p-1">Fuel type</td>
-                      <td className="border border-gray-300 p-1">
-                        {carDetails["Fuel Type"]}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="font-semibold border border-gray-300 p-1">
-                        Transmission type
-                      </td>
-                      <td className="border border-gray-300 p-1">
-                        {carDetails["Transmission Type"]}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="font-semibold border border-gray-300 p-1">Car type</td>
-                      <td className="border border-gray-300 p-1">{carDetails["Body Type"]}</td>
-                    </tr>
-                    <tr>
-                      <td className="font-semibold border border-gray-300 p-1">Mileage</td>
-                      <td className="border border-gray-300 p-1">
-                        {carDetails["Mileage (ARAI) (kmpl)"]} KMPL
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="font-semibold border border-gray-300 p-1">Engine</td>
-                      <td className="border border-gray-300 p-1">
-                        {carDetails["Engine Power (cc)"]} CC,{" "}
-                        {carDetails["Engine Specification"]}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="font-semibold border border-gray-300 p-1">Safety</td>
-                      <td className="border border-gray-300 p-1">
-                        {carDetails["NCAP Rating (Adult) (Star (Global NCAP))"]} Star Global
-                        NCAP
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="font-semibold border border-gray-300 p-1">
-                        Emission Standard
-                      </td>
-                      <td className="border border-gray-300 p-1">
-                        {carDetails["Emission Standard"]}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </>
-        )} */}
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
         {/* Key Features Section */}        
         {carDetails && (
           <>
@@ -549,15 +476,6 @@ const PreviewProposal = () => {
         )}
 
 
-
-//////////////////////////////////////////////////////////////////////////////////////
-        {/* Car Overview Section */}
-        {/* <hr className="border-t border-blue-600 mb-4" />
-        <h2 className="text-lg font-semibold mb-3">E. Customization Suggestions</h2>
-        <p className="mb-4 text-sm leading-relaxed">{customizationSuggestions}</p> */}
-
-
-
         {/* Car Overview Section */}
         <hr className="border-t border-blue-600 mb-4" />
         <h2 className="text-lg font-semibold mb-3">F. Customization Suggestions</h2>
@@ -580,7 +498,6 @@ const PreviewProposal = () => {
         </div>
 
 
-/////////////////////////////////////////////////////////////////////////////////////
           {/* Financial Overview Section */}
           <hr className="border-t border-blue-600 mb-4" />
           <h2 className="text-lg font-semibold mb-3">G. Financial Overview</h2>
@@ -681,21 +598,53 @@ const PreviewProposal = () => {
             These options provide a range of choices for financing your {carDetails.Model} {carDetails.Version}, allowing flexibility based on your financial preferences and needs. For further details and to choose the best option, please contact our finance team.
           </p>
 
-///////////////////////////////////////////////////////////////////////////////////////////////
         {/* Proposal Summary Section */}
         <hr className="border-t border-blue-600 mb-4" />
         <h2 className="text-lg font-semibold mb-3">H. Proposal Summary</h2>
         <p className="mb-4 text-sm leading-relaxed">{proposalSummary}</p>
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////
         {/* Conclusion Section */}
         <hr className="border-t border-blue-600 mb-4" />
         <h2 className="text-lg font-semibold mb-3">I. Conclusion</h2>
         <p className="mb-4 text-sm leading-relaxed">{conclusion}</p>
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////
+        {/* Acknowledgement Section */}
+        <hr className="border-t border-blue-600 mb-4" />
+        <h2 className="text-lg font-semibold mb-3">J. Acknowledgement</h2>
+        <p className="text-base leading-relaxed">
+          I, <strong><u>{`${proposalData.customer_details.designation} ${proposalData.customer_details.fullName}` || "Mr./Ms. [User Name]"}</u></strong>, 
+          acknowledge that the above proposal accurately reflects my selections and preferences for the {carDetails.Model || "[Car Model]"} {carDetails.Version}.
+          I understand and agree to the terms and conditions, including the financial overview and customization options, as detailed in this proposal.
+        </p>
+        <div className="mt-6">
+          <p className="text-base"><strong>Date:</strong> {getCurrentDate()}</p>
+          <p className="text-base"><strong>Place:</strong> {proposalData.customer_details.residentialAddress} </p>
+        </div>
+        <p className="text-base mt-4">
+          Thank you for choosing us for your automotive needs. We look forward to delivering your customized {carDetails.Model || "[Car Model]"} {carDetails.Version} and providing you with an exceptional car-buying experience.
+        </p>
+
+        {/* Signature Section */}
+        <div className="flex justify-end items-center mt-6">
+          <div className="flex flex-col items-center">
+            {proposalData.signature ? (
+              <div className="border border-black rounded-md p-2" style={{ width: "200px", height: "100px" }}>
+                <img
+                  src={signature} // Assuming this holds the signature image as a URL or base64 string
+                  alt="Customer's Signature"
+                  className="object-contain"
+                  style={{ width: "100%", height: "100%" }} // Make image fill the container
+                />
+              </div>
+            ) : (
+              <p className="italic text-gray-500">No signature available</p>
+            )}
+            <p className="text-sm font-medium mt-2 text-center">Signature</p> {/* Added text-center and mt-2 for spacing */}
+          </div>
+        </div>
+
 
         {/* Footer Section */}
         <div className="mt-4 pt-4 border-t border-blue-600 text-sm flex justify-between items-center">

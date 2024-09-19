@@ -43,6 +43,14 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Customer requirements not found for this session.' }, { status: 404 });
     }
 
+    // Fetch the signature from the collection without directly importing the model
+    const ValidatedProposalSignatureCollection = mongoose.connection.collection('validatedproposalsignatures');
+    const validatedSignature = await ValidatedProposalSignatureCollection.findOne({ sessionId });
+
+    if (!validatedSignature) {
+      return NextResponse.json({ success: false, error: 'Signature not found' }, { status: 404 });
+    }
+
     // Fetch car details from CarSpecificationDataset based on selected model and version from the frontend
     const CarSpecificationDataset = mongoose.connection.collection('CarSpecificationDataset');
     let carDetails = null;
@@ -88,6 +96,7 @@ export async function POST(req) {
         proposalSummary: aiGeneratedContent.proposalSummary || 'No proposal summary available',
         conclusion: aiGeneratedContent.conclusion || 'No conclusion available',
         customer_requirements: customerRequirements,
+        signature: validatedSignature.signature, // Send signature to frontend
         carDetails: carDetails || {},  // Return carDetails even if empty
       },
       { status: 201 }
