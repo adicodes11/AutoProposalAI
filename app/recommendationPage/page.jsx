@@ -238,7 +238,7 @@ const RecommendedCars = () => {
                   Gen AI Recommended
                 </span>
               )}
-              <h3 className="text-xl font-bold mb-2 text-gray-900">{car.carModel}</h3>
+              <h4 className="text-xl font-bold mb-2 text-gray-900">{car.carModel} {car.version}</h4>
               <p className="text-lg font-semibold text-gray-700 mb-2">₹ {car.exShowroomPrice}</p>
               <div className="flex justify-between items-center mb-4">
                 <div className="text-left">
@@ -304,7 +304,7 @@ const RecommendedCars = () => {
                 <th className="border border-gray-300 p-3">Criteria</th>
                 {(loading ? placeholderData : top4Recommendations).map((car, index) => (
                   <th key={index} className="border border-gray-300 p-3">
-                    {car.carModel}
+                    {car.carModel} {car.version}      {/*Make changes here for the Comparison Table Header*/} 
                   </th>
                 ))}
               </tr>

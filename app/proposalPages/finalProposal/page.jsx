@@ -5,7 +5,28 @@ import Image from "next/image";
 import logo from "/assets/logo.png";
 import { useRouter } from "next/navigation";
 
-const PreviewProposal = () => {
+
+
+import html2pdf from "html2pdf.js";
+
+const handleDownload = () => {
+  const element = printRef.current; // The reference to the content
+  
+  const opt = {
+    margin:       0.5,
+    filename:     `Proposal_${PID}.pdf`,
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, useCORS: true },
+    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+
+  html2pdf().from(element).set(opt).save();
+};
+
+
+
+
+const FinalProposal = () => {
   const [proposalData, setProposalData] = useState(null);
   const [proposalIntroduction, setProposalIntroduction] = useState("");
   const [carOverview, setCarOverview] = useState("");
@@ -42,7 +63,7 @@ const PreviewProposal = () => {
           throw new Error("Session data missing.");
         }
 
-        const response = await fetch("/api/proposalRoutes/proposalPreviewRoute", {
+        const response = await fetch("/api/proposalRoutes/finalProposalRoute", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -599,9 +620,33 @@ const PreviewProposal = () => {
           </p>
 
         {/* Proposal Summary Section */}
+        {/* <hr className="border-t border-blue-600 mb-4" />
+        <h2 className="text-lg font-semibold mb-3">H. Proposal Summary</h2>
+        <p className="mb-4 text-sm leading-relaxed">{proposalSummary}</p> */}
+
+
+        {/* <hr className="border-t border-blue-600 mb-4" />
+        <h2 className="text-lg font-semibold mb-3">H. Proposal Summary</h2>
+        <div className="mb-4 text-sm leading-relaxed">
+        {proposalSummary.split('\n').map((paragraph, index) => (
+            <p key={index} className="mb-4">
+            {paragraph.trim()}
+            </p>
+        ))}
+        </div> */}
+
+
         <hr className="border-t border-blue-600 mb-4" />
         <h2 className="text-lg font-semibold mb-3">H. Proposal Summary</h2>
-        <p className="mb-4 text-sm leading-relaxed">{proposalSummary}</p>
+        <div className="mb-4 text-sm leading-relaxed">
+        {proposalSummary.split('\n').map((paragraph, index) => (
+            <p key={index} className="leading-relaxed">
+            {paragraph.trim()}
+            </p>
+        ))}
+        </div>
+
+
 
 
         {/* Conclusion Section */}
@@ -676,6 +721,18 @@ const PreviewProposal = () => {
           Print Proposal
         </button>
 
+
+
+        {/* Download Button */}
+        {/* <button
+          onClick={handleDownload}
+          className="px-8 py-2 text-lg font-semibold text-gray-700 border border-gray-400 rounded-lg hover:bg-gray-100 transition duration-300"
+        >
+          Download Proposal
+        </button> */}
+
+        
+
         {/* Validate Proposal Button */}
         <button
           onClick={handleValidate}
@@ -688,4 +745,4 @@ const PreviewProposal = () => {
   );
 };
 
-export default PreviewProposal;
+export default FinalProposal;
