@@ -383,9 +383,6 @@ const PreviewProposal = () => {
           </>
         )}
 
-
-
-/////////////////////////////////////
         {/* Key Features Section */}
         {/* {carDetails && (
           <>
@@ -457,8 +454,6 @@ const PreviewProposal = () => {
         )} */}
 
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
         {/* Key Features Section */}        
         {carDetails && (
           <>
@@ -550,7 +545,6 @@ const PreviewProposal = () => {
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////
         {/* Car Overview Section */}
         {/* <hr className="border-t border-blue-600 mb-4" />
         <h2 className="text-lg font-semibold mb-3">E. Customization Suggestions</h2>
@@ -580,7 +574,6 @@ const PreviewProposal = () => {
         </div>
 
 
-/////////////////////////////////////////////////////////////////////////////////////
           {/* Financial Overview Section */}
           <hr className="border-t border-blue-600 mb-4" />
           <h2 className="text-lg font-semibold mb-3">G. Financial Overview</h2>
@@ -681,21 +674,18 @@ const PreviewProposal = () => {
             These options provide a range of choices for financing your {carDetails.Model} {carDetails.Version}, allowing flexibility based on your financial preferences and needs. For further details and to choose the best option, please contact our finance team.
           </p>
 
-///////////////////////////////////////////////////////////////////////////////////////////////
         {/* Proposal Summary Section */}
         <hr className="border-t border-blue-600 mb-4" />
         <h2 className="text-lg font-semibold mb-3">H. Proposal Summary</h2>
         <p className="mb-4 text-sm leading-relaxed">{proposalSummary}</p>
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////
         {/* Conclusion Section */}
         <hr className="border-t border-blue-600 mb-4" />
         <h2 className="text-lg font-semibold mb-3">I. Conclusion</h2>
         <p className="mb-4 text-sm leading-relaxed">{conclusion}</p>
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////
 
         {/* Footer Section */}
         <div className="mt-4 pt-4 border-t border-blue-600 text-sm flex justify-between items-center">

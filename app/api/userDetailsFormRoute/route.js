@@ -80,7 +80,7 @@ export async function POST(req) {
     });
 
     // Python API URL (use port 5001 as Python backend is running there)
-    const pythonApiUrl = 'http://127.0.0.1:5001/generateProposal';
+    const pythonApiUrl = 'https://ai-proposal-content-generation-module-chk4.onrender.com/generateProposal';
 
     // Data to send to Python API
     const pythonApiData = {

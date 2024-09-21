@@ -323,7 +323,7 @@ const ValidateProposalPage = () => {
         )}
 
         <p className="mt-6 text-sm text-gray-600 text-center italic">
-          By clicking "Submit", you agree that the signature is the electronic representation
+          By clicking &quot;Submit&quot;, you agree that the signature is the electronic representation
           of your signature for all purposes, including legally binding documents.
         </p>
 

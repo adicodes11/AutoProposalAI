@@ -397,8 +397,8 @@ const FinalProposal = () => {
                 <Image
                   src={getImageName(carDetails.Model, customerRequirements.carColor) || "/path/to/default-car-image.jpg"}
                   alt={carDetails.Model}
-                  width={708}
-                  height={500}
+                  width={50}
+                  height={20}
                   className="object-contain"
                 />
               </div>
@@ -724,12 +724,12 @@ const FinalProposal = () => {
 
 
         {/* Download Button */}
-        {/* <button
+        <button
           onClick={handleDownload}
           className="px-8 py-2 text-lg font-semibold text-gray-700 border border-gray-400 rounded-lg hover:bg-gray-100 transition duration-300"
         >
           Download Proposal
-        </button> */}
+        </button> 
 
         
 
