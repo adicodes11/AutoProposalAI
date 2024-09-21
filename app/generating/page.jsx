@@ -38,7 +38,7 @@ const GeneratingProposal = () => {
 
         {/* Text for Describing the Process */}
         <p className="text-xl text-gray-300">
-          We're crafting the best proposal based on your inputs.
+          We&#39;re crafting the best proposal based on your inputs.
         </p>
 
         {/* Progress Bar */}

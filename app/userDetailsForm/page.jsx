@@ -101,7 +101,7 @@ const UserDetailForm = () => {
       alert("User details saved successfully.");
 
       // Step 2: Trigger the Python API to generate the proposal
-      const pythonResponse = await fetch("https://ai-proposal-content-generation-module-chk4.onrender.com/generateProposal", {
+      const pythonResponse = await fetch("https://ai-proposal-content-generation-module.onrender.com/generateProposal", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
