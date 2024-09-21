@@ -9,14 +9,17 @@ import Footer2 from '@/components/Footer2';
 const Requirement2 = () => {
   const [selectedStyles, setSelectedStyles] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [sessionId, setSessionId] = useState(null); // State for sessionId
   const router = useRouter();
 
-  // Load sessionId and previous selections from sessionStorage
-  const sessionId = sessionStorage.getItem('sessionId');
-  
+  // Load sessionId and previous selections from sessionStorage when on the client side
   useEffect(() => {
-    const storedStyles = JSON.parse(sessionStorage.getItem('bodyStyles')) || [];
-    setSelectedStyles(storedStyles);
+    if (typeof window !== 'undefined') {
+      const storedStyles = JSON.parse(sessionStorage.getItem('bodyStyles')) || [];
+      const storedSessionId = sessionStorage.getItem('sessionId'); // Fetch sessionId from sessionStorage
+      setSelectedStyles(storedStyles);
+      setSessionId(storedSessionId);
+    }
   }, []);
 
   const handleStyleChange = (style) => {
@@ -25,7 +28,9 @@ const Requirement2 = () => {
       : [...selectedStyles, style];
 
     setSelectedStyles(newSelection);
-    sessionStorage.setItem('bodyStyles', JSON.stringify(newSelection)); // Save to sessionStorage
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('bodyStyles', JSON.stringify(newSelection)); // Save to sessionStorage
+    }
   };
 
   const handleSubmit = async () => {
@@ -38,6 +43,7 @@ const Requirement2 = () => {
 
     if (!sessionId) {
       alert('Session not found. Please log in.');
+      setIsSubmitting(false);
       return;
     }
 
@@ -116,7 +122,7 @@ const Requirement2 = () => {
           className="px-6 py-2 border border-red-700 rounded-md text-white font-bold bg-red-700 hover:bg-red-800"
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Next' : 'Next'}
+          {isSubmitting ? 'Submitting...' : 'Next'}
         </button>
       </div>
       <Footer2 />
