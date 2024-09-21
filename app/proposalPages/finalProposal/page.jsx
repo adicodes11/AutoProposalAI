@@ -4,27 +4,21 @@ import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import logo from "/assets/logo.png";
 import { useRouter } from "next/navigation";
-
-
-
 import html2pdf from "html2pdf.js";
 
 const handleDownload = () => {
   const element = printRef.current; // The reference to the content
-  
+
   const opt = {
-    margin:       0.5,
-    filename:     `Proposal_${PID}.pdf`,
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2, useCORS: true },
-    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    margin: 0.5,
+    filename: `Proposal_${PID}.pdf`,
+    image: { type: "jpeg", quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true },
+    jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
   };
 
   html2pdf().from(element).set(opt).save();
 };
-
-
-
 
 const FinalProposal = () => {
   const [proposalData, setProposalData] = useState(null);
@@ -406,8 +400,7 @@ const FinalProposal = () => {
           </>
         )}
 
-
-        {/* Key Features Section */}        
+        {/* Key Features Section */}
         {carDetails && (
           <>
             <hr className="border-t border-blue-600 mb-4" />
@@ -417,7 +410,7 @@ const FinalProposal = () => {
               </div>
             </div>
             <div className="flex flex-wrap mb-4">
-              <div className="w-full md:w-1/2 pr-4">  
+              <div className="w-full md:w-1/2 pr-4">
                 <h3 className="text-md font-semibold mb-2">Exterior</h3>
                 <ul className="list-disc ml-6 mb-4">
                   <li>{carDetails["Headlights"] || "N/A"} with LED DRLs</li>
@@ -449,7 +442,6 @@ const FinalProposal = () => {
                 <ul className="list-disc ml-6 mb-4">
                   <li>{carDetails["Follow me home headlamps"] ? "Follow-Me-Home Headlamps" : "N/A"}</li>
                   <li>{carDetails["Drive Modes"] ? `Multi-Drive Modes (${carDetails["Drive Modes"]})` : "N/A"}</li>
-                  {/* <li>Nexon Signature Grille</li> */}
                   <li>{carDetails["Keyless Start"] ? "Smart Key with Push Button Start" : "N/A"}</li>
                 </ul>
               </div>
@@ -496,7 +488,6 @@ const FinalProposal = () => {
           </>
         )}
 
-
         {/* Car Overview Section */}
         <hr className="border-t border-blue-600 mb-4" />
         <h2 className="text-lg font-semibold mb-3">F. Customization Suggestions</h2>
@@ -518,142 +509,119 @@ const FinalProposal = () => {
           })}
         </div>
 
+        {/* Financial Overview Section */}
+        <hr className="border-t border-blue-600 mb-4" />
+        <h2 className="text-lg font-semibold mb-3">G. Financial Overview</h2>
 
-          {/* Financial Overview Section */}
-          <hr className="border-t border-blue-600 mb-4" />
-          <h2 className="text-lg font-semibold mb-3">G. Financial Overview</h2>
+        {/* Vehicle Cost Details */}
+        <p className="mb-2 text-sm">
+          <strong>Vehicle Cost (Showroom Price):</strong> ₹{carDetails["Ex-Showroom Price"]} lakhs
+        </p>
 
-          {/* Vehicle Cost Details */}
-          <p className="mb-2 text-sm">
-            <strong>Vehicle Cost (Showroom Price):</strong> ₹{carDetails["Ex-Showroom Price"]} lakhs
-          </p>
+        {/* Customization cost (fixed) */}
+        <p className="mb-2 text-sm"><strong>Customization cost:</strong> ₹6,103</p>
 
-          {/* Customization cost (fixed) */}
-          <p className="mb-2 text-sm"><strong>Customization cost:</strong> ₹6,103</p>
+        {/* Total cost (calculated as vehicle cost + some fixed value) */}
+        <p className="mb-2 text-sm">
+          <strong>Total Cost:</strong> ₹{(carDetails["Ex-Showroom Price"] + 0.6).toFixed(2)} lakhs (including taxes and fees)
+        </p>
 
-          {/* Total cost (calculated as vehicle cost + some fixed value) */}
-          <p className="mb-2 text-sm">
-            <strong>Total Cost:</strong> ₹{(carDetails["Ex-Showroom Price"] + 0.6).toFixed(2)} lakhs (including taxes and fees)
-          </p>
+        {/* On-road Price (using the Mumbai field from CarSpecificationDataset) */}
+        <p className="mb-2 text-sm">
+          <strong>On-Road Price:</strong> ₹{carDetails.Mumbai / 100000} lakhs (includes registration, road tax, and insurance)
+        </p>
 
-          {/* On-road Price (using the Mumbai field from CarSpecificationDataset) */}
-          <p className="mb-2 text-sm">
-            <strong>On-Road Price:</strong> ₹{carDetails.Mumbai / 100000} lakhs (includes registration, road tax, and insurance)
-          </p>
-
-          {/* Financing Options */}
-          <h3 className="mt-4 mb-2 text-md font-semibold">Financing Options</h3>
-          <table className="table-auto w-full mb-4 border-collapse border border-gray-300">
-            <thead>
-              <tr>
-                <th className="border border-gray-300 p-2">Options</th>
-                <th className="border border-gray-300 p-2">Standard Loan</th>
-                <th className="border border-gray-300 p-2">Flexi Loan</th>
-                <th className="border border-gray-300 p-2">Balloon Payment</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border border-gray-300 p-2 font-semibold">Intrest Rate</td>
-                <td className="border border-gray-300 p-2">3.5% APR</td>
-                <td className="border border-gray-300 p-2">3.8% APR</td>
-                <td className="border border-gray-300 p-2">3.2% APR</td>
-              </tr>
-              <tr>
-                <td className="border border-gray-300 p-2 font-semibold">LOAN TERM</td>
-                <td className="border border-gray-300 p-2">5 Years</td>
-                <td className="border border-gray-300 p-2">Up to 7 Years</td>
-                <td className="border border-gray-300 p-2">3 Years</td>
-              </tr>
-              <tr>
-                <td className="border border-gray-300 p-2 font-semibold">EMI (Estimated Monthly Installment)</td>
-                <td className="border border-gray-300 p-2">₹15,366</td>
-                <td className="border border-gray-300 p-2">₹12,594 (For a 7-year term)</td>
-                <td className="border border-gray-300 p-2">₹14,575 (30% of the total cost at the end of the term)</td>
-              </tr>
-            </tbody>
-          </table>
-
-          {/* Insurance Options */}
-          <h3 className="mt-4 mb-2 text-md font-semibold">Insurance Options</h3>
-          <ul className="list-disc ml-8 mb-4 text-sm">
-            <li>
-              <strong>Comprehensive Insurance:</strong> ₹25,000 per year (includes third-party liability, own damage, and personal accident cover)
-            </li>
-            <li>
-              <strong>Third-Party Insurance:</strong> ₹8,000 per year (minimum legal requirement)
-            </li>
-          </ul>
-
-          {/* Down Payment and Amount Financed */}
-          
-          {/* <h3 className="mt-4 mb-2 text-md font-semibold">Down Payment</h3> */}
-          <table className="table-auto w-full mb-4 border-collapse border border-gray-300">
+        {/* Financing Options */}
+        <h3 className="mt-4 mb-2 text-md font-semibold">Financing Options</h3>
+        <table className="table-auto w-full mb-4 border-collapse border border-gray-300">
           <thead>
-              <tr>
-                <th className="border border-gray-300 p-2">Options</th>
-                <th className="border border-gray-300 p-2">Standard Loan</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border border-gray-300 p-2 font-semibold">
-                  <ul className="list-disc ml-4 text-sm">
-                    <li>Minimum Down Payment: 20% of On-Road Price</li>
-                    <li>Amount: ₹{(carDetails.Mumbai * 0.2 / 100000).toFixed(2)} lakhs</li>
-                  </ul>
-                </td>
-                <td className="border border-gray-300 p-2">
-                  <ul className="list-disc ml-4 text-sm">
-                    <li><strong>Option 1:</strong> ₹{(carDetails.Mumbai * 0.8 / 100000).toFixed(2)} lakhs</li>
-                    <li><strong>Option 2:</strong> ₹{(carDetails.Mumbai * 0.8 / 100000).toFixed(2)} lakhs</li>
-                    <li><strong>Option 3:</strong> ₹{(carDetails.Mumbai * 0.8 / 100000).toFixed(2)} lakhs (excluding balloon payment)</li>
-                  </ul>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+            <tr>
+              <th className="border border-gray-300 p-2">Options</th>
+              <th className="border border-gray-300 p-2">Standard Loan</th>
+              <th className="border border-gray-300 p-2">Flexi Loan</th>
+              <th className="border border-gray-300 p-2">Balloon Payment</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border border-gray-300 p-2 font-semibold">Interest Rate</td>
+              <td className="border border-gray-300 p-2">3.5% APR</td>
+              <td className="border border-gray-300 p-2">3.8% APR</td>
+              <td className="border border-gray-300 p-2">3.2% APR</td>
+            </tr>
+            <tr>
+              <td className="border border-gray-300 p-2 font-semibold">Loan Term</td>
+              <td className="border border-gray-300 p-2">5 Years</td>
+              <td className="border border-gray-300 p-2">Up to 7 Years</td>
+              <td className="border border-gray-300 p-2">3 Years</td>
+            </tr>
+            <tr>
+              <td className="border border-gray-300 p-2 font-semibold">EMI (Estimated Monthly Installment)</td>
+              <td className="border border-gray-300 p-2">₹15,366</td>
+              <td className="border border-gray-300 p-2">₹12,594 (For a 7-year term)</td>
+              <td className="border border-gray-300 p-2">₹14,575 (30% of the total cost at the end of the term)</td>
+            </tr>
+          </tbody>
+        </table>
 
-          {/* Final Text Part */}
-          <p className="text-sm leading-relaxed">
-            These options provide a range of choices for financing your {carDetails.Model} {carDetails.Version}, allowing flexibility based on your financial preferences and needs. For further details and to choose the best option, please contact our finance team.
-          </p>
+        {/* Insurance Options */}
+        <h3 className="mt-4 mb-2 text-md font-semibold">Insurance Options</h3>
+        <ul className="list-disc ml-8 mb-4 text-sm">
+          <li>
+            <strong>Comprehensive Insurance:</strong> ₹25,000 per year (includes third-party liability, own damage, and personal accident cover)
+          </li>
+          <li>
+            <strong>Third-Party Insurance:</strong> ₹8,000 per year (minimum legal requirement)
+          </li>
+        </ul>
+
+        {/* Down Payment and Amount Financed */}
+        <table className="table-auto w-full mb-4 border-collapse border border-gray-300">
+          <thead>
+            <tr>
+              <th className="border border-gray-300 p-2">Options</th>
+              <th className="border border-gray-300 p-2">Standard Loan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border border-gray-300 p-2 font-semibold">
+                <ul className="list-disc ml-4 text-sm">
+                  <li>Minimum Down Payment: 20% of On-Road Price</li>
+                  <li>Amount: ₹{(carDetails.Mumbai * 0.2 / 100000).toFixed(2)} lakhs</li>
+                </ul>
+              </td>
+              <td className="border border-gray-300 p-2">
+                <ul className="list-disc ml-4 text-sm">
+                  <li><strong>Option 1:</strong> ₹{(carDetails.Mumbai * 0.8 / 100000).toFixed(2)} lakhs</li>
+                  <li><strong>Option 2:</strong> ₹{(carDetails.Mumbai * 0.8 / 100000).toFixed(2)} lakhs</li>
+                  <li><strong>Option 3:</strong> ₹{(carDetails.Mumbai * 0.8 / 100000).toFixed(2)} lakhs (excluding balloon payment)</li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        {/* Final Text Part */}
+        <p className="text-sm leading-relaxed">
+          These options provide a range of choices for financing your {carDetails.Model} {carDetails.Version}, allowing flexibility based on your financial preferences and needs. For further details and to choose the best option, please contact our finance team.
+        </p>
 
         {/* Proposal Summary Section */}
-        {/* <hr className="border-t border-blue-600 mb-4" />
-        <h2 className="text-lg font-semibold mb-3">H. Proposal Summary</h2>
-        <p className="mb-4 text-sm leading-relaxed">{proposalSummary}</p> */}
-
-
-        {/* <hr className="border-t border-blue-600 mb-4" />
-        <h2 className="text-lg font-semibold mb-3">H. Proposal Summary</h2>
-        <div className="mb-4 text-sm leading-relaxed">
-        {proposalSummary.split('\n').map((paragraph, index) => (
-            <p key={index} className="mb-4">
-            {paragraph.trim()}
-            </p>
-        ))}
-        </div> */}
-
-
         <hr className="border-t border-blue-600 mb-4" />
         <h2 className="text-lg font-semibold mb-3">H. Proposal Summary</h2>
         <div className="mb-4 text-sm leading-relaxed">
-        {proposalSummary.split('\n').map((paragraph, index) => (
+          {proposalSummary.split('\n').map((paragraph, index) => (
             <p key={index} className="leading-relaxed">
-            {paragraph.trim()}
+              {paragraph.trim()}
             </p>
-        ))}
+          ))}
         </div>
-
-
-
 
         {/* Conclusion Section */}
         <hr className="border-t border-blue-600 mb-4" />
         <h2 className="text-lg font-semibold mb-3">I. Conclusion</h2>
         <p className="mb-4 text-sm leading-relaxed">{conclusion}</p>
-
 
         {/* Acknowledgement Section */}
         <hr className="border-t border-blue-600 mb-4" />
@@ -690,7 +658,6 @@ const FinalProposal = () => {
           </div>
         </div>
 
-
         {/* Footer Section */}
         <div className="mt-4 pt-4 border-t border-blue-600 text-sm flex justify-between items-center">
           <span>
@@ -721,8 +688,6 @@ const FinalProposal = () => {
           Print Proposal
         </button>
 
-
-
         {/* Download Button */}
         <button
           onClick={handleDownload}
@@ -730,8 +695,6 @@ const FinalProposal = () => {
         >
           Download Proposal
         </button> 
-
-        
 
         {/* Validate Proposal Button */}
         <button
