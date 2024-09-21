@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { assets } from '@/assets/assets';
@@ -11,11 +11,20 @@ const ReviewAndRatingPage = () => {
   const [review, setReview] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [carModel, setCarModel] = useState('');  // Capture carModel
+  const [userId, setUserId] = useState(null);  // Initialize with null
+  const [sessionId, setSessionId] = useState(null); // Initialize with null
+
   const router = useRouter();
 
-  // Load userId and sessionId from sessionStorage
-  const userId = sessionStorage.getItem('userId');
-  const sessionId = sessionStorage.getItem('sessionId');
+  // Load userId and sessionId from sessionStorage in the browser
+  useEffect(() => {
+    if (typeof window !== 'undefined') {  // Ensure code runs only in the browser
+      const storedUserId = sessionStorage.getItem('userId');
+      const storedSessionId = sessionStorage.getItem('sessionId');
+      setUserId(storedUserId);
+      setSessionId(storedSessionId);
+    }
+  }, []);  // Run once when the component mounts
 
   const handleRatingChange = (selectedRating) => {
     setRating(selectedRating);
