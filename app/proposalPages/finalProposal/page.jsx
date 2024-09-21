@@ -4,21 +4,10 @@ import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import logo from "/assets/logo.png";
 import { useRouter } from "next/navigation";
-import html2pdf from "html2pdf.js";
+import dynamic from "next/dynamic";
 
-const handleDownload = () => {
-  const element = printRef.current; // The reference to the content
-
-  const opt = {
-    margin: 0.5,
-    filename: `Proposal_${PID}.pdf`,
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true },
-    jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
-  };
-
-  html2pdf().from(element).set(opt).save();
-};
+// Dynamically import html2pdf.js to ensure it only runs on the client-side
+const html2pdf = dynamic(() => import("html2pdf.js"), { ssr: false });
 
 const FinalProposal = () => {
   const [proposalData, setProposalData] = useState(null);
@@ -48,43 +37,45 @@ const FinalProposal = () => {
   useEffect(() => {
     const fetchProposal = async () => {
       try {
-        const sessionId = sessionStorage.getItem("sessionId");
-        const createdBy = sessionStorage.getItem("userId");
-        const selectedCarModel = sessionStorage.getItem("selectedCarModel");
-        const selectedVersion = sessionStorage.getItem("selectedVersion");
+        if (typeof window !== "undefined") {
+          const sessionId = sessionStorage.getItem("sessionId");
+          const createdBy = sessionStorage.getItem("userId");
+          const selectedCarModel = sessionStorage.getItem("selectedCarModel");
+          const selectedVersion = sessionStorage.getItem("selectedVersion");
 
-        if (!sessionId || !createdBy || !selectedCarModel || !selectedVersion) {
-          throw new Error("Session data missing.");
-        }
+          if (!sessionId || !createdBy || !selectedCarModel || !selectedVersion) {
+            throw new Error("Session data missing.");
+          }
 
-        const response = await fetch("/api/proposalRoutes/finalProposalRoute", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            sessionId,
-            createdBy,
-            selectedCarModel,
-            selectedVersion,
-          }),
-        });
+          const response = await fetch("/api/proposalRoutes/finalProposalRoute", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              sessionId,
+              createdBy,
+              selectedCarModel,
+              selectedVersion,
+            }),
+          });
 
-        if (response.ok) {
-          const data = await response.json();
-          setProposalData(data);
-          setPID(data.PID);
-          setGeneratedByEmail(data.generatedByEmail);
-          setProposalIntroduction(data.introduction);
-          setCarOverview(data.carOverview);
-          setCustomizationSuggestions(data.customizationSuggestions);
-          setProposalSummary(data.proposalSummary);
-          setConclusion(data.conclusion);
-          setSignature(data.signature); // Fetch signature
-          setCustomerRequirements(data.customer_requirements);
-          setCarDetails(data.carDetails);
-        } else {
-          throw new Error("Failed to fetch proposal data.");
+          if (response.ok) {
+            const data = await response.json();
+            setProposalData(data);
+            setPID(data.PID);
+            setGeneratedByEmail(data.generatedByEmail);
+            setProposalIntroduction(data.introduction);
+            setCarOverview(data.carOverview);
+            setCustomizationSuggestions(data.customizationSuggestions);
+            setProposalSummary(data.proposalSummary);
+            setConclusion(data.conclusion);
+            setSignature(data.signature); // Fetch signature
+            setCustomerRequirements(data.customer_requirements);
+            setCarDetails(data.carDetails);
+          } else {
+            throw new Error("Failed to fetch proposal data.");
+          }
         }
       } catch (err) {
         setError(err.message);
@@ -117,6 +108,21 @@ const FinalProposal = () => {
   const getCurrentDate = () => {
     const date = new Date();
     return date.toLocaleString();
+  };
+
+  const handleDownload = () => {
+    const element = printRef.current;
+    const opt = {
+      margin: 0.5,
+      filename: `Proposal_${PID}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+    };
+
+    if (html2pdf && element) {
+      html2pdf().from(element).set(opt).save();
+    }
   };
 
   if (loading) {
@@ -273,31 +279,6 @@ const FinalProposal = () => {
                       {customerRequirements.primaryUse}
                     </td>
                   </tr>
-                  {/* Additional Fields */}
-                  <tr>
-                    <td className="font-semibold border border-gray-300 p-1">Driving Experience</td>
-                    <td className="border border-gray-300 p-1">
-                      {customerRequirements.drivingExperience || "N/A"}
-                    </td>
-                    <td className="font-semibold border border-gray-300 p-1">Engine Power</td>
-                    <td className="border border-gray-300 p-1">
-                      {customerRequirements.enginePower || "N/A"}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="font-semibold border border-gray-300 p-1">
-                      Ground Clearance
-                    </td>
-                    <td className="border border-gray-300 p-1">
-                      {customerRequirements.groundClearance || "N/A"}
-                    </td>
-                    <td className="font-semibold border border-gray-300 p-1">
-                      Battery Capacity
-                    </td>
-                    <td className="border border-gray-300 p-1">
-                      {customerRequirements.batteryCapacity || "N/A"}
-                    </td>
-                  </tr>
                 </tbody>
               </table>
             </div>
@@ -387,7 +368,6 @@ const FinalProposal = () => {
                 </table>
               </div>
               <div className="w-full md:w-1/2 mt-4 md:mt-0">
-                {/* Fetch car image based on the car model and color */}
                 <Image
                   src={getImageName(carDetails.Model, customerRequirements.carColor) || "/path/to/default-car-image.jpg"}
                   alt={carDetails.Model}
@@ -672,35 +652,19 @@ const FinalProposal = () => {
 
       {/* Button Container */}
       <div className="flex justify-between w-full max-w-4xl mt-6">
-        {/* Back Button */}
-        <button
-          onClick={handleBack}
-          className="px-8 py-2 text-lg font-semibold text-indigo-700 border border-indigo-700 rounded-lg hover:bg-indigo-100 transition duration-300"
-        >
+        <button onClick={handleBack} className="px-8 py-2 text-lg font-semibold text-indigo-700 border border-indigo-700 rounded-lg hover:bg-indigo-100 transition duration-300">
           Back to Recommendation
         </button>
 
-        {/* Print Button */}
-        <button
-          onClick={handlePrint}
-          className="px-8 py-2 text-lg font-semibold text-gray-700 border border-gray-400 rounded-lg hover:bg-gray-100 transition duration-300"
-        >
+        <button onClick={handlePrint} className="px-8 py-2 text-lg font-semibold text-gray-700 border border-gray-400 rounded-lg hover:bg-gray-100 transition duration-300">
           Print Proposal
         </button>
 
-        {/* Download Button */}
-        <button
-          onClick={handleDownload}
-          className="px-8 py-2 text-lg font-semibold text-gray-700 border border-gray-400 rounded-lg hover:bg-gray-100 transition duration-300"
-        >
+        <button onClick={handleDownload} className="px-8 py-2 text-lg font-semibold text-gray-700 border border-gray-400 rounded-lg hover:bg-gray-100 transition duration-300">
           Download Proposal
-        </button> 
+        </button>
 
-        {/* Validate Proposal Button */}
-        <button
-          onClick={handleValidate}
-          className="px-8 py-2 text-lg font-semibold text-white bg-blue-600 border border-blue-600 rounded-lg hover:bg-blue-700 transition duration-300"
-        >
+        <button onClick={handleValidate} className="px-8 py-2 text-lg font-semibold text-white bg-blue-600 border border-blue-600 rounded-lg hover:bg-blue-700 transition duration-300">
           Validate Proposal
         </button>
       </div>
