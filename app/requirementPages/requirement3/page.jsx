@@ -9,50 +9,65 @@ const Requirement3 = () => {
   const [transmissionType, setTransmissionType] = useState('');
   const [drivingRange, setDrivingRange] = useState('');
   const [seatingCapacity, setSeatingCapacity] = useState('');
+  const [sessionId, setSessionId] = useState(null); // Store sessionId from sessionStorage
   const router = useRouter();
 
-  // Load sessionId and previous selections from sessionStorage
-  const sessionId = sessionStorage.getItem('sessionId');
-
+  // Load sessionId and previous selections from sessionStorage on the client side
   useEffect(() => {
-    const storedFuelType = sessionStorage.getItem('fuelType');
-    const storedTransmissionType = sessionStorage.getItem('transmissionType');
-    const storedDrivingRange = sessionStorage.getItem('drivingRange');
-    const storedSeatingCapacity = sessionStorage.getItem('seatingCapacity');
-    
-    if (storedFuelType) setFuelType(storedFuelType);
-    if (storedTransmissionType) setTransmissionType(storedTransmissionType);
-    if (storedDrivingRange) setDrivingRange(storedDrivingRange);
-    if (storedSeatingCapacity) setSeatingCapacity(storedSeatingCapacity);
+    if (typeof window !== 'undefined') {
+      const storedFuelType = sessionStorage.getItem('fuelType');
+      const storedTransmissionType = sessionStorage.getItem('transmissionType');
+      const storedDrivingRange = sessionStorage.getItem('drivingRange');
+      const storedSeatingCapacity = sessionStorage.getItem('seatingCapacity');
+      const storedSessionId = sessionStorage.getItem('sessionId'); // Fetch sessionId from sessionStorage
+
+      if (storedFuelType) setFuelType(storedFuelType);
+      if (storedTransmissionType) setTransmissionType(storedTransmissionType);
+      if (storedDrivingRange) setDrivingRange(storedDrivingRange);
+      if (storedSeatingCapacity) setSeatingCapacity(storedSeatingCapacity);
+      setSessionId(storedSessionId); // Store the sessionId for submission
+    }
   }, []);
 
   const handleFuelTypeChange = (type) => {
     setFuelType(type);
-    sessionStorage.setItem('fuelType', type); // Save to sessionStorage
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('fuelType', type); // Save to sessionStorage
+    }
 
     // If the fuel type is Electric, automatically set the transmission to "Automatic"
     if (type === 'Electric') {
       setTransmissionType('Automatic');
-      sessionStorage.setItem('transmissionType', 'Automatic');
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('transmissionType', 'Automatic');
+      }
     } else {
       setTransmissionType(''); // Reset transmission for other fuel types
-      sessionStorage.setItem('transmissionType', ''); // Ensure the sessionStorage is reset
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('transmissionType', ''); // Ensure the sessionStorage is reset
+      }
     }
   };
 
   const handleTransmissionTypeChange = (type) => {
     setTransmissionType(type);
-    sessionStorage.setItem('transmissionType', type); // Save to sessionStorage
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('transmissionType', type); // Save to sessionStorage
+    }
   };
 
   const handleDrivingRangeChange = (range) => {
     setDrivingRange(range);
-    sessionStorage.setItem('drivingRange', range); // Save to sessionStorage
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('drivingRange', range); // Save to sessionStorage
+    }
   };
 
   const handleSeatingCapacityChange = (capacity) => {
     setSeatingCapacity(capacity);
-    sessionStorage.setItem('seatingCapacity', capacity); // Save to sessionStorage
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('seatingCapacity', capacity); // Save to sessionStorage
+    }
   };
 
   const handleSubmit = async () => {
@@ -65,17 +80,17 @@ const Requirement3 = () => {
     const response = await fetch('/api/requirementPagesRoutes/requirement3Route', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        fuelType, 
-        transmissionType,  // Ensure transmissionType is passed to the backend
-        drivingRange, 
-        seatingCapacity, 
-        sessionId  // Pass sessionId to the backend
+      body: JSON.stringify({
+        fuelType,
+        transmissionType,
+        drivingRange,
+        seatingCapacity,
+        sessionId // Pass sessionId to the backend
       }),
     });
 
     if (response.ok) {
-      router.push('/requirementPages/requirement4'); // Move to next page
+      router.push('/requirementPages/requirement4'); // Move to the next page
     } else {
       console.error('Failed to submit data');
     }
