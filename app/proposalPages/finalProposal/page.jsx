@@ -4,7 +4,27 @@ import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import logo from "/assets/logo.png";
 import { useRouter } from "next/navigation";
+
+
+
 import html2pdf from "html2pdf.js";
+
+const handleDownload = () => {
+  const element = printRef.current; // The reference to the content
+  
+  const opt = {
+    margin:       0.5,
+    filename:     `Proposal_${PID}.pdf`,
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, useCORS: true },
+    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+
+  html2pdf().from(element).set(opt).save();
+};
+
+
+
 
 const FinalProposal = () => {
   const [proposalData, setProposalData] = useState(null);
@@ -15,7 +35,7 @@ const FinalProposal = () => {
   const [conclusion, setConclusion] = useState("");
   const [customerRequirements, setCustomerRequirements] = useState(null);
   const [carDetails, setCarDetails] = useState(null);
-  const [signature, setSignature] = useState(null);
+  const [signature, setSignature] = useState(null); // Add state for the signature
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [PID, setPID] = useState("");
@@ -81,18 +101,6 @@ const FinalProposal = () => {
 
     fetchProposal();
   }, []);
-
-  const handleDownload = () => {
-    const element = printRef.current;
-    const opt = {
-      margin: 0.5,
-      filename: `Proposal_${PID}.pdf`,
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
-    };
-    html2pdf().from(element).set(opt).save();
-  };
 
   const handlePrint = () => {
     const printContent = printRef.current.innerHTML;
@@ -389,8 +397,8 @@ const FinalProposal = () => {
                 <Image
                   src={getImageName(carDetails.Model, customerRequirements.carColor) || "/path/to/default-car-image.jpg"}
                   alt={carDetails.Model}
-                  width={50}
-                  height={20}
+                  width={708}
+                  height={500}
                   className="object-contain"
                 />
               </div>
@@ -398,7 +406,8 @@ const FinalProposal = () => {
           </>
         )}
 
-        {/* Key Features Section */}
+
+        {/* Key Features Section */}        
         {carDetails && (
           <>
             <hr className="border-t border-blue-600 mb-4" />
@@ -408,7 +417,7 @@ const FinalProposal = () => {
               </div>
             </div>
             <div className="flex flex-wrap mb-4">
-              <div className="w-full md:w-1/2 pr-4">
+              <div className="w-full md:w-1/2 pr-4">  
                 <h3 className="text-md font-semibold mb-2">Exterior</h3>
                 <ul className="list-disc ml-6 mb-4">
                   <li>{carDetails["Headlights"] || "N/A"} with LED DRLs</li>
@@ -440,6 +449,7 @@ const FinalProposal = () => {
                 <ul className="list-disc ml-6 mb-4">
                   <li>{carDetails["Follow me home headlamps"] ? "Follow-Me-Home Headlamps" : "N/A"}</li>
                   <li>{carDetails["Drive Modes"] ? `Multi-Drive Modes (${carDetails["Drive Modes"]})` : "N/A"}</li>
+                  {/* <li>Nexon Signature Grille</li> */}
                   <li>{carDetails["Keyless Start"] ? "Smart Key with Push Button Start" : "N/A"}</li>
                 </ul>
               </div>
@@ -486,120 +496,164 @@ const FinalProposal = () => {
           </>
         )}
 
-        {/* Customization Suggestions Section */}
+
+        {/* Car Overview Section */}
         <hr className="border-t border-blue-600 mb-4" />
         <h2 className="text-lg font-semibold mb-3">F. Customization Suggestions</h2>
+
+        {/* Properly format and display customization suggestions */}
         <div className="mb-4 text-sm leading-relaxed">
           {customizationSuggestions.split('\n').map((line, index) => {
+            // Check if the line is a heading (doesn't start with a number or bullet point)
             const isHeading = !/^[0-9]/.test(line.trim()) && line.trim().length > 0;
+
             return (
-              <p key={index} className={`${isHeading ? 'font-bold mb-2' : 'ml-4 mb-1'}`}>
+              <p
+                key={index}
+                className={`${isHeading ? 'font-bold mb-2' : 'ml-4 mb-1'}`}
+              >
                 {line.trim()}
               </p>
             );
           })}
         </div>
 
-        {/* Financial Overview Section */}
-        <hr className="border-t border-blue-600 mb-4" />
-        <h2 className="text-lg font-semibold mb-3">G. Financial Overview</h2>
-        <p className="mb-2 text-sm">
-          <strong>Vehicle Cost (Showroom Price):</strong> ₹{carDetails["Ex-Showroom Price"]} lakhs
-        </p>
-        <p className="mb-2 text-sm"><strong>Customization cost:</strong> ₹6,103</p>
-        <p className="mb-2 text-sm">
-          <strong>Total Cost:</strong> ₹{(carDetails["Ex-Showroom Price"] + 0.6).toFixed(2)} lakhs (including taxes and fees)
-        </p>
-        <p className="mb-2 text-sm">
-          <strong>On-Road Price:</strong> ₹{carDetails.Mumbai / 100000} lakhs (includes registration, road tax, and insurance)
-        </p>
 
-        {/* Financing Options */}
-        <h3 className="mt-4 mb-2 text-md font-semibold">Financing Options</h3>
-        <table className="table-auto w-full mb-4 border-collapse border border-gray-300">
+          {/* Financial Overview Section */}
+          <hr className="border-t border-blue-600 mb-4" />
+          <h2 className="text-lg font-semibold mb-3">G. Financial Overview</h2>
+
+          {/* Vehicle Cost Details */}
+          <p className="mb-2 text-sm">
+            <strong>Vehicle Cost (Showroom Price):</strong> ₹{carDetails["Ex-Showroom Price"]} lakhs
+          </p>
+
+          {/* Customization cost (fixed) */}
+          <p className="mb-2 text-sm"><strong>Customization cost:</strong> ₹6,103</p>
+
+          {/* Total cost (calculated as vehicle cost + some fixed value) */}
+          <p className="mb-2 text-sm">
+            <strong>Total Cost:</strong> ₹{(carDetails["Ex-Showroom Price"] + 0.6).toFixed(2)} lakhs (including taxes and fees)
+          </p>
+
+          {/* On-road Price (using the Mumbai field from CarSpecificationDataset) */}
+          <p className="mb-2 text-sm">
+            <strong>On-Road Price:</strong> ₹{carDetails.Mumbai / 100000} lakhs (includes registration, road tax, and insurance)
+          </p>
+
+          {/* Financing Options */}
+          <h3 className="mt-4 mb-2 text-md font-semibold">Financing Options</h3>
+          <table className="table-auto w-full mb-4 border-collapse border border-gray-300">
+            <thead>
+              <tr>
+                <th className="border border-gray-300 p-2">Options</th>
+                <th className="border border-gray-300 p-2">Standard Loan</th>
+                <th className="border border-gray-300 p-2">Flexi Loan</th>
+                <th className="border border-gray-300 p-2">Balloon Payment</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-300 p-2 font-semibold">Intrest Rate</td>
+                <td className="border border-gray-300 p-2">3.5% APR</td>
+                <td className="border border-gray-300 p-2">3.8% APR</td>
+                <td className="border border-gray-300 p-2">3.2% APR</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 p-2 font-semibold">LOAN TERM</td>
+                <td className="border border-gray-300 p-2">5 Years</td>
+                <td className="border border-gray-300 p-2">Up to 7 Years</td>
+                <td className="border border-gray-300 p-2">3 Years</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 p-2 font-semibold">EMI (Estimated Monthly Installment)</td>
+                <td className="border border-gray-300 p-2">₹15,366</td>
+                <td className="border border-gray-300 p-2">₹12,594 (For a 7-year term)</td>
+                <td className="border border-gray-300 p-2">₹14,575 (30% of the total cost at the end of the term)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          {/* Insurance Options */}
+          <h3 className="mt-4 mb-2 text-md font-semibold">Insurance Options</h3>
+          <ul className="list-disc ml-8 mb-4 text-sm">
+            <li>
+              <strong>Comprehensive Insurance:</strong> ₹25,000 per year (includes third-party liability, own damage, and personal accident cover)
+            </li>
+            <li>
+              <strong>Third-Party Insurance:</strong> ₹8,000 per year (minimum legal requirement)
+            </li>
+          </ul>
+
+          {/* Down Payment and Amount Financed */}
+          
+          {/* <h3 className="mt-4 mb-2 text-md font-semibold">Down Payment</h3> */}
+          <table className="table-auto w-full mb-4 border-collapse border border-gray-300">
           <thead>
-            <tr>
-              <th className="border border-gray-300 p-2">Options</th>
-              <th className="border border-gray-300 p-2">Standard Loan</th>
-              <th className="border border-gray-300 p-2">Flexi Loan</th>
-              <th className="border border-gray-300 p-2">Balloon Payment</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="border border-gray-300 p-2 font-semibold">Interest Rate</td>
-              <td className="border border-gray-300 p-2">3.5% APR</td>
-              <td className="border border-gray-300 p-2">3.8% APR</td>
-              <td className="border border-gray-300 p-2">3.2% APR</td>
-            </tr>
-            <tr>
-              <td className="border border-gray-300 p-2 font-semibold">Loan Term</td>
-              <td className="border border-gray-300 p-2">5 Years</td>
-              <td className="border border-gray-300 p-2">Up to 7 Years</td>
-              <td className="border border-gray-300 p-2">3 Years</td>
-            </tr>
-            <tr>
-              <td className="border border-gray-300 p-2 font-semibold">EMI</td>
-              <td className="border border-gray-300 p-2">₹15,366</td>
-              <td className="border border-gray-300 p-2">₹12,594</td>
-              <td className="border border-gray-300 p-2">₹14,575</td>
-            </tr>
-          </tbody>
-        </table>
+              <tr>
+                <th className="border border-gray-300 p-2">Options</th>
+                <th className="border border-gray-300 p-2">Standard Loan</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-300 p-2 font-semibold">
+                  <ul className="list-disc ml-4 text-sm">
+                    <li>Minimum Down Payment: 20% of On-Road Price</li>
+                    <li>Amount: ₹{(carDetails.Mumbai * 0.2 / 100000).toFixed(2)} lakhs</li>
+                  </ul>
+                </td>
+                <td className="border border-gray-300 p-2">
+                  <ul className="list-disc ml-4 text-sm">
+                    <li><strong>Option 1:</strong> ₹{(carDetails.Mumbai * 0.8 / 100000).toFixed(2)} lakhs</li>
+                    <li><strong>Option 2:</strong> ₹{(carDetails.Mumbai * 0.8 / 100000).toFixed(2)} lakhs</li>
+                    <li><strong>Option 3:</strong> ₹{(carDetails.Mumbai * 0.8 / 100000).toFixed(2)} lakhs (excluding balloon payment)</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-        {/* Insurance Options */}
-        <h3 className="mt-4 mb-2 text-md font-semibold">Insurance Options</h3>
-        <ul className="list-disc ml-8 mb-4 text-sm">
-          <li><strong>Comprehensive Insurance:</strong> ₹25,000 per year</li>
-          <li><strong>Third-Party Insurance:</strong> ₹8,000 per year</li>
-        </ul>
-
-        {/* Down Payment and Amount Financed */}
-        <table className="table-auto w-full mb-4 border-collapse border border-gray-300">
-          <thead>
-            <tr>
-              <th className="border border-gray-300 p-2">Options</th>
-              <th className="border border-gray-300 p-2">Standard Loan</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="border border-gray-300 p-2 font-semibold">
-                <ul className="list-disc ml-4 text-sm">
-                  <li>Minimum Down Payment: 20% of On-Road Price</li>
-                  <li>Amount: ₹{(carDetails.Mumbai * 0.2 / 100000).toFixed(2)} lakhs</li>
-                </ul>
-              </td>
-              <td className="border border-gray-300 p-2">
-                <ul className="list-disc ml-4 text-sm">
-                  <li><strong>Option 1:</strong> ₹{(carDetails.Mumbai * 0.8 / 100000).toFixed(2)} lakhs</li>
-                  <li><strong>Option 2:</strong> ₹{(carDetails.Mumbai * 0.8 / 100000).toFixed(2)} lakhs</li>
-                  <li><strong>Option 3:</strong> ₹{(carDetails.Mumbai * 0.8 / 100000).toFixed(2)} lakhs</li>
-                </ul>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p className="text-sm leading-relaxed">
-          These options provide a range of choices for financing your {carDetails.Model} {carDetails.Version}, allowing flexibility based on your financial preferences and needs. For further details and to choose the best option, please contact our finance team.
-        </p>
+          {/* Final Text Part */}
+          <p className="text-sm leading-relaxed">
+            These options provide a range of choices for financing your {carDetails.Model} {carDetails.Version}, allowing flexibility based on your financial preferences and needs. For further details and to choose the best option, please contact our finance team.
+          </p>
 
         {/* Proposal Summary Section */}
+        {/* <hr className="border-t border-blue-600 mb-4" />
+        <h2 className="text-lg font-semibold mb-3">H. Proposal Summary</h2>
+        <p className="mb-4 text-sm leading-relaxed">{proposalSummary}</p> */}
+
+
+        {/* <hr className="border-t border-blue-600 mb-4" />
+        <h2 className="text-lg font-semibold mb-3">H. Proposal Summary</h2>
+        <div className="mb-4 text-sm leading-relaxed">
+        {proposalSummary.split('\n').map((paragraph, index) => (
+            <p key={index} className="mb-4">
+            {paragraph.trim()}
+            </p>
+        ))}
+        </div> */}
+
+
         <hr className="border-t border-blue-600 mb-4" />
         <h2 className="text-lg font-semibold mb-3">H. Proposal Summary</h2>
         <div className="mb-4 text-sm leading-relaxed">
-          {proposalSummary.split("\n").map((paragraph, index) => (
+        {proposalSummary.split('\n').map((paragraph, index) => (
             <p key={index} className="leading-relaxed">
-              {paragraph.trim()}
+            {paragraph.trim()}
             </p>
-          ))}
+        ))}
         </div>
+
+
+
 
         {/* Conclusion Section */}
         <hr className="border-t border-blue-600 mb-4" />
         <h2 className="text-lg font-semibold mb-3">I. Conclusion</h2>
         <p className="mb-4 text-sm leading-relaxed">{conclusion}</p>
+
 
         {/* Acknowledgement Section */}
         <hr className="border-t border-blue-600 mb-4" />
@@ -620,21 +674,22 @@ const FinalProposal = () => {
         {/* Signature Section */}
         <div className="flex justify-end items-center mt-6">
           <div className="flex flex-col items-center">
-            {signature ? (
+            {proposalData.signature ? (
               <div className="border border-black rounded-md p-2" style={{ width: "200px", height: "100px" }}>
                 <img
-                  src={signature}
+                  src={signature} // Assuming this holds the signature image as a URL or base64 string
                   alt="Customer's Signature"
                   className="object-contain"
-                  style={{ width: "100%", height: "100%" }}
+                  style={{ width: "100%", height: "100%" }} // Make image fill the container
                 />
               </div>
             ) : (
               <p className="italic text-gray-500">No signature available</p>
             )}
-            <p className="text-sm font-medium mt-2 text-center">Signature</p>
+            <p className="text-sm font-medium mt-2 text-center">Signature</p> {/* Added text-center and mt-2 for spacing */}
           </div>
         </div>
+
 
         {/* Footer Section */}
         <div className="mt-4 pt-4 border-t border-blue-600 text-sm flex justify-between items-center">
@@ -650,24 +705,35 @@ const FinalProposal = () => {
 
       {/* Button Container */}
       <div className="flex justify-between w-full max-w-4xl mt-6">
+        {/* Back Button */}
         <button
           onClick={handleBack}
           className="px-8 py-2 text-lg font-semibold text-indigo-700 border border-indigo-700 rounded-lg hover:bg-indigo-100 transition duration-300"
         >
           Back to Recommendation
         </button>
+
+        {/* Print Button */}
         <button
           onClick={handlePrint}
           className="px-8 py-2 text-lg font-semibold text-gray-700 border border-gray-400 rounded-lg hover:bg-gray-100 transition duration-300"
         >
           Print Proposal
         </button>
+
+
+
+        {/* Download Button */}
         <button
           onClick={handleDownload}
           className="px-8 py-2 text-lg font-semibold text-gray-700 border border-gray-400 rounded-lg hover:bg-gray-100 transition duration-300"
         >
           Download Proposal
-        </button>
+        </button> 
+
+        
+
+        {/* Validate Proposal Button */}
         <button
           onClick={handleValidate}
           className="px-8 py-2 text-lg font-semibold text-white bg-blue-600 border border-blue-600 rounded-lg hover:bg-blue-700 transition duration-300"

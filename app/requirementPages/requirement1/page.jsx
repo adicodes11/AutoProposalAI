@@ -11,32 +11,42 @@ const Requirement1 = () => {
   const [location, setLocation] = useState('');
   const [showLocation, setShowLocation] = useState(false);
   const router = useRouter();
-
-  // Load userId and sessionId from sessionStorage
-  const userId = sessionStorage.getItem('userId');
-  const sessionId = sessionStorage.getItem('sessionId');  // Fetch the sessionId
   
-  // Load previous selections from sessionStorage
+  const [userId, setUserId] = useState(null);
+  const [sessionId, setSessionId] = useState(null);
+
+  // Load userId and sessionId from sessionStorage on client-side only
   useEffect(() => {
-    const savedBudget = sessionStorage.getItem('budget');
-    const savedLocation = sessionStorage.getItem('location');
-    if (savedBudget) setBudget(savedBudget);
-    if (savedLocation) {
-      setLocation(savedLocation);
-      setShowLocation(true);
+    if (typeof window !== 'undefined') {
+      const storedUserId = sessionStorage.getItem('userId');
+      const storedSessionId = sessionStorage.getItem('sessionId');
+      setUserId(storedUserId);
+      setSessionId(storedSessionId);
+
+      const savedBudget = sessionStorage.getItem('budget');
+      const savedLocation = sessionStorage.getItem('location');
+      if (savedBudget) setBudget(savedBudget);
+      if (savedLocation) {
+        setLocation(savedLocation);
+        setShowLocation(true);
+      }
     }
   }, []);
 
   const handleBudgetChange = (selectedBudget) => {
     setBudget(selectedBudget);
     setShowLocation(true);
-    sessionStorage.setItem('budget', selectedBudget); // Save to sessionStorage
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('budget', selectedBudget); // Save to sessionStorage
+    }
   };
 
   const handleLocationChange = (event) => {
     const selectedLocation = event.target.value;
     setLocation(selectedLocation);
-    sessionStorage.setItem('location', selectedLocation); // Save to sessionStorage
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('location', selectedLocation); // Save to sessionStorage
+    }
   };
 
   const handleBack = () => {
