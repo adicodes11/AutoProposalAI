@@ -201,7 +201,7 @@ const RecommendedCars = () => {
   const handleCustomize = (carModel, version) => {
     sessionStorage.setItem("selectedCarModel", carModel);
     sessionStorage.setItem("selectedVersion", version);
-    router.push("/customizecar");
+    router.push("/customizationMenuPage");
   };
 
   // Handle navigation to the generate proposal page

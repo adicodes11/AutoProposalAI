@@ -24,6 +24,9 @@ import icon_customization from './icon_customization.png'
 import ground_clearance from './ground_clearance.png'
 import info_icon from './info_icon.png'
 import boot_space from './boot_space.png'
+import download_pdf from './download_pdf.png'
+import mail from './mail.png'
+import print from './print.png'
 
 export const assets = {
     facebook_icon,  
@@ -52,4 +55,7 @@ export const assets = {
     ground_clearance,
     info_icon,
     boot_space,
+    download_pdf,
+    mail,
+    print,
 }

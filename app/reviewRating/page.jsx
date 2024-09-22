@@ -10,19 +10,27 @@ const ReviewAndRatingPage = () => {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  const [carModel, setCarModel] = useState('');  // Capture carModel
+  const [carModel, setCarModel] = useState('');  // Capture concatenated carModel
   const [userId, setUserId] = useState(null);  // Initialize with null
   const [sessionId, setSessionId] = useState(null); // Initialize with null
 
   const router = useRouter();
 
-  // Load userId and sessionId from sessionStorage in the browser
+  // Load userId, sessionId, selectedCarModel, and selectedVersion from sessionStorage in the browser
   useEffect(() => {
     if (typeof window !== 'undefined') {  // Ensure code runs only in the browser
       const storedUserId = sessionStorage.getItem('userId');
       const storedSessionId = sessionStorage.getItem('sessionId');
+      const selectedCarModel = sessionStorage.getItem('selectedCarModel');
+      const selectedVersion = sessionStorage.getItem('selectedVersion');
+      
       setUserId(storedUserId);
       setSessionId(storedSessionId);
+
+      // Concatenate selectedCarModel and selectedVersion
+      if (selectedCarModel && selectedVersion) {
+        setCarModel(`${selectedCarModel} ${selectedVersion}`);
+      }
     }
   }, []);  // Run once when the component mounts
 
@@ -34,18 +42,14 @@ const ReviewAndRatingPage = () => {
     setReview(event.target.value);
   };
 
-  const handleCarModelChange = (event) => {
-    setCarModel(event.target.value);
-  };
-
   const handleSubmit = async () => {
-    if (!rating || !review || !carModel) {
-      alert('Please provide a car model, rating, and review.');
+    if (!rating || !review) {
+      alert('Please provide a rating and review.');
       return;
     }
 
-    if (!userId || !sessionId) {
-      alert('User not logged in or session invalid.');
+    if (!userId || !sessionId || !carModel) {
+      alert('User not logged in, session invalid, or car model is missing.');
       return;
     }
 
@@ -60,6 +64,11 @@ const ReviewAndRatingPage = () => {
         const data = await response.json();
         console.log('Review submitted successfully:', data);
         setSubmitted(true);
+
+        // Redirect to home page after 10 seconds
+        setTimeout(() => {
+          router.push('/');
+        }, 10000); // 10 seconds delay
       } else {
         const errorData = await response.json();
         console.error('Error submitting review:', errorData);
@@ -90,18 +99,6 @@ const ReviewAndRatingPage = () => {
           <h1 className="text-5xl font-extrabold text-white mb-8 tracking-wide">
             Rate and Review
           </h1>
-
-          {/* Car Model Input */}
-          <div className="mb-10">
-            <h2 className="text-2xl font-semibold text-gray-200 mb-4">Car Model</h2>
-            <input
-              type="text"
-              value={carModel}
-              onChange={handleCarModelChange}
-              className="w-full p-4 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow shadow-md bg-gray-800 bg-opacity-40 text-gray-200 placeholder-gray-500"
-              placeholder="Enter Car Model"
-            />
-          </div>
 
           {/* Rating Section */}
           <div className="mb-10">
@@ -145,7 +142,7 @@ const ReviewAndRatingPage = () => {
           {/* Confirmation Message */}
           {submitted && (
             <div className="mt-6 text-lg font-semibold text-green-400 animate-pulse">
-              Thank you for your review!
+              Thank you for your review! Redirecting to home in 10 seconds...
             </div>
           )}
         </div>

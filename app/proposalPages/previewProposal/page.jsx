@@ -112,7 +112,7 @@ const PreviewProposal = () => {
   }
 
   return (
-    <div className="p-4 flex flex-col items-center justify-between h-screen bg-gray-50">
+    <div className="p-4 flex flex-col items-center justify-between h-screen bg-white">
       <div
         ref={printRef}
         className="bg-white p-6 border border-gray-300 rounded-xl shadow-lg w-full max-w-4xl"

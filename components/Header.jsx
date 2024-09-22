@@ -65,17 +65,17 @@ function Header() {
               Home
             </span>
           </Link>
-          <Link href="/about">
+          <Link href="/aboutUs">
             <span className="font-bold text-lg py-1 px-3 text-gray-800 hover:text-blue-500 transition-colors duration-300 cursor-pointer">
               About Us
             </span>
           </Link>
-          <Link href="/contact">
+          <Link href="/contactUs">
             <span className="font-bold text-lg py-1 px-3 text-gray-800 hover:text-blue-500 transition-colors duration-300 cursor-pointer">
               Contact Us
             </span>
           </Link>
-          <Link href="/help">
+          <Link href="/helpPage">
             <span className="font-bold text-lg py-1 px-3 text-gray-800 hover:text-blue-500 transition-colors duration-300 cursor-pointer">
               Help
             </span>
