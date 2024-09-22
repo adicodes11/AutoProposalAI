@@ -163,7 +163,7 @@ const DetailedRequirement2 = () => {
 
       // Step 2: Call the Flask API for recommendations using the requirementId
       const recommendationResponse = await fetch(
-        "https://carrecommendationmodule-production.up.railway.app/recommendations",
+        "https://carrecommendationmodule.onrender.com/recommendations",
         {
           method: "POST",
           headers: {

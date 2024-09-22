@@ -80,7 +80,7 @@ export async function POST(req) {
     });
 
     // Python API URL (use port 5001 as Python backend is running there)
-    const pythonApiUrl = 'https://aiproposalcontentgeneration-production.up.railway.app/generateProposal';
+    const pythonApiUrl = 'https://ai-proposal-content-generation-module.onrender.com/generateProposal';
 
     // Data to send to Python API
     const pythonApiData = {
