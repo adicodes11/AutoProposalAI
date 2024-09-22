@@ -122,7 +122,7 @@ const Requirement2 = () => {
           className="px-6 py-2 border border-red-700 rounded-md text-white font-bold bg-red-700 hover:bg-red-800"
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Submitting...' : 'Next'}
+          {isSubmitting ? 'Next...' : 'Next'}
         </button>
       </div>
       <Footer2 />
