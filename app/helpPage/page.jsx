@@ -109,8 +109,9 @@ const HelpPage = () => {
         <section className="max-w-5xl w-full mb-12 text-center">
           <h2 className="text-3xl font-semibold mb-6">Still need help?</h2>
           <p className="text-lg leading-relaxed text-gray-200 mb-8">
-            If you can't find the answer you're looking for, feel free to reach out to us.
-            We’re always here to assist you.
+            If you can&apos;t find the answer you&apos;re looking for, feel free to reach out to us.
+            We&apos;re always here to assist you.
+
           </p>
           <div className="flex justify-center space-x-6">
             <div className="bg-gradient-to-r from-pink-500 to-yellow-500 p-4 rounded-lg shadow-lg">

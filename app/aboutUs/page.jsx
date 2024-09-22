@@ -72,7 +72,7 @@ const AboutUsPage = () => {
         <section className="max-w-5xl w-full mb-12">
           <h2 className="text-3xl font-semibold text-center mb-6">Our Story</h2>
           <p className="text-lg leading-relaxed text-center text-gray-200">
-            AutoProposalAI was born out of a vision to simplify the car buying process through AI. We combine the intelligence of Generative AI models with an intuitive user experience to offer proposals that are personalized and smart. Over the course of our development, we've built a platform that caters to both the novice buyer and the seasoned car enthusiast.
+          AutoProposalAI was born out of a vision to simplify the car buying process through AI. We combine the intelligence of Generative AI models with an intuitive user experience to offer proposals that are personalized and smart. Over the course of our development, we&apos;ve built a platform that caters to both the novice buyer and the seasoned car enthusiast.
           </p>
         </section>
 
