@@ -65,6 +65,9 @@ const ReviewAndRatingPage = () => {
         console.log('Review submitted successfully:', data);
         setSubmitted(true);
 
+        // Clear session storage after successful submission
+        sessionStorage.clear();
+
         // Redirect to home page after 10 seconds
         setTimeout(() => {
           router.push('/');
