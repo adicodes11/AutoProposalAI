@@ -14,6 +14,18 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    otp: { // OTP field
+        type: String,
+        required: false,
+    },
+    otpExpiry: { // OTP expiration time
+        type: Date,
+        required: false,
+    },
+    verified: { // Verification status
+        type: Boolean,
+        default: false,
+    },
     date: {
         type: Date,
         default: Date.now,  // Use Date.now without parentheses

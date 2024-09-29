@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import User from '@/models/UserModel';  
 import { ConnectDB } from '@/lib/config/db';
 import bcrypt from 'bcryptjs';
-import crypto from 'crypto';  // For generating sessionId
+import crypto from 'crypto';
+import nodemailer from 'nodemailer';  // For sending OTP emails
 
 // Helper function to check if password is in the breached list
 async function isPasswordBreached(password) {
@@ -39,17 +40,41 @@ export async function POST(request) {
     // Hash the password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new user in the database
-    const newUser = await User.create({ fullname, email: normalizedEmail, password: hashedPassword });
+    // Generate OTP and expiration time (e.g., 5 minutes from now)
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpiry = new Date(Date.now() + 5 * 60000); // OTP expires in 5 minutes
 
-    // Extract the first name from the full name
-    const firstName = fullname.split(' ')[0];
+    // Create a new user in the database but mark them as unverified
+    const newUser = await User.create({
+      fullname,
+      email: normalizedEmail,
+      password: hashedPassword,
+      otp,
+      otpExpiry,
+      verified: false,  // User is not verified yet
+    });
 
-    // Generate a session ID upon successful sign-up
+    // Send OTP email to the user
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.GMAIL_USER,
+      to: normalizedEmail,
+      subject: 'Verify Your Email - OTP',
+      text: `Your OTP for email verification is ${otp}. This OTP is valid for 5 minutes.`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    // Return a success message along with sessionId (optional)
     const sessionId = crypto.randomBytes(16).toString('hex');
-
-    // Return firstName and sessionId for storage in the frontend
-    return NextResponse.json({ msg: "User registered successfully!", firstName, sessionId }, { status: 201 });
+    return NextResponse.json({ msg: "OTP sent to email!", sessionId }, { status: 201 });
   } catch (error) {
     console.error("User registration failed:", error);
     return NextResponse.json({ error: "User registration failed!" }, { status: 500 });

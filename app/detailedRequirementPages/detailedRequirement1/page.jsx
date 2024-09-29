@@ -304,7 +304,7 @@ const DetailedRequirement1 = () => {
                 <>
                   <h2 className="text-3xl font-bold mt-8 text-gray-700 flex items-center">
                     How important is car power to you?
-                    <HelperIcon imageSrc={assets.logo} />
+                    <HelperIcon imageSrc={assets.car_power} />
                   </h2>
                   <div className="grid grid-cols-2 gap-4 mb-6 mt-4">
                     {[
@@ -366,7 +366,7 @@ const DetailedRequirement1 = () => {
             <div className={`${currentSection === 1 ? "block" : "hidden"}`}>
               <h2 className="text-3xl font-bold mt-8 text-gray-700 flex items-center">
                 Which of the following drive modes are you interested in?
-                <HelperIcon imageSrc={assets.logo} />
+                <HelperIcon imageSrc={assets.drive_modes} />
               </h2>
               <div className="grid grid-cols-2 gap-4 mt-4">
                 {[
@@ -401,7 +401,7 @@ const DetailedRequirement1 = () => {
             <div className={`${currentSection === 2 ? "block" : "hidden"}`}>
               <h2 className="text-3xl font-bold mt-8 text-gray-700 flex items-center">
                 Exterior Design Preferences
-                <HelperIcon imageSrc={assets.logo} />
+                <HelperIcon imageSrc={assets.exterior_car_preferences} />
               </h2>
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4 mb-4">
@@ -465,7 +465,7 @@ const DetailedRequirement1 = () => {
                 <div className="mb-4">
                   <h2 className="text-2xl font-bold text-gray-700 flex items-center">
                     Fuel Tank Capacity
-                    <HelperIcon imageSrc={assets.logo} />
+                    <HelperIcon imageSrc={assets.fuel_tank_capacity} />
                   </h2>
                   <select
                     value={answers.fuelTankCapacity}
@@ -522,7 +522,7 @@ const DetailedRequirement1 = () => {
             <div className={`${currentSection === 4 ? "block" : "hidden"}`}>
               <h2 className="text-2xl font-bold text-gray-700 flex items-center">
                 Safety Features
-                <HelperIcon imageSrc={assets.logo} />
+                <HelperIcon imageSrc={assets.safety_features} />
               </h2>
               <div className="space-y-12">
                 {/* Safety Features */}
@@ -562,7 +562,7 @@ const DetailedRequirement1 = () => {
                 <div className="mb-4 mt-2">
                   <h2 className="text-2xl font-bold text-gray-700 flex items-center">
                     Entertainment Features
-                    <HelperIcon imageSrc={assets.logo} />
+                    <HelperIcon imageSrc={assets.entertainment_features} />
                   </h2>
                   <div className="grid grid-cols-2 gap-4">
                     {[
@@ -601,7 +601,7 @@ const DetailedRequirement1 = () => {
                 <div className="mb-4">
                   <h2 className="text-2xl font-bold text-gray-700 flex items-center">
                     Comfort Features
-                    <HelperIcon imageSrc={assets.logo} />
+                    <HelperIcon imageSrc={assets.comfort_features} />
                   </h2>
                   <div className="grid grid-cols-2 gap-4">
                     {[
@@ -635,7 +635,7 @@ const DetailedRequirement1 = () => {
                 <div className="mb-4">
                   <h2 className="text-2xl font-bold text-gray-700 flex items-center">
                     Driving Assistance Features
-                    <HelperIcon imageSrc={assets.logo} />
+                    <HelperIcon imageSrc={assets.driving_assistance_features} />
                   </h2>
                   <div className="grid grid-cols-2 gap-4">
                     {[
@@ -673,7 +673,7 @@ const DetailedRequirement1 = () => {
                 <div className="mb-4">
                   <h2 className="text-2xl font-bold text-gray-700 flex items-center">
                     Driving Experience
-                    <HelperIcon imageSrc={assets.logo} />
+                    <HelperIcon imageSrc={assets.driving_experience} />
                   </h2>
                   <div className="grid grid-cols-2 gap-4">
                     {[

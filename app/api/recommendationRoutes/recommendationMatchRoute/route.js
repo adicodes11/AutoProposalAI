@@ -177,15 +177,50 @@ export async function POST(req) {
 
     // Sort the updated recommendations by match percentage in descending order
     const sortedRecommendations = updatedRecommendations
-      .sort((a, b) => b.matchPercentage - a.matchPercentage)
-      .slice(0, 4); // Get top 4 recommendations
+      .sort((a, b) => b.matchPercentage - a.matchPercentage);
 
-    console.log('Top 4 sorted cars:', sortedRecommendations);
+    // Apply logic to ensure no more than 2 cars from the same model in top 4
+    const carModelCount = {};
+    const finalTop4Recommendations = [];
 
-    // Create a single document with an array of top 4 recommendations
+    for (const recommendation of sortedRecommendations) {
+      const carModel = recommendation['Car Model'];
+
+      // Initialize the count for the car model if not already done
+      if (!carModelCount[carModel]) {
+        carModelCount[carModel] = 0;
+      }
+
+      // Add the car to the final recommendations if there are fewer than 2 from this model
+      if (carModelCount[carModel] < 2) {
+        finalTop4Recommendations.push(recommendation);
+        carModelCount[carModel] += 1;
+      }
+
+      // Stop once we have 4 cars in the final recommendations
+      if (finalTop4Recommendations.length === 4) {
+        break;
+      }
+    }
+
+    // If there are less than 4 cars, fill the remaining slots with other cars, regardless of model
+    if (finalTop4Recommendations.length < 4) {
+      for (const recommendation of sortedRecommendations) {
+        if (!finalTop4Recommendations.includes(recommendation)) {
+          finalTop4Recommendations.push(recommendation);
+        }
+        if (finalTop4Recommendations.length === 4) {
+          break;
+        }
+      }
+    }
+
+    console.log('Final Top 4 sorted cars:', finalTop4Recommendations);
+
+    // Create a single document with the array of top 4 recommendations
     const top4RecommendationsDocument = {
       sessionId,
-      recommendations: sortedRecommendations.map((rec) => ({
+      recommendations: finalTop4Recommendations.map((rec) => ({
         carModel: rec['Car Model'],
         version: rec['Version'],
         matchPercentage: rec.matchPercentage

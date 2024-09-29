@@ -27,6 +27,19 @@ import boot_space from './boot_space.png'
 import download_pdf from './download_pdf.png'
 import mail from './mail.png'
 import print from './print.png'
+import drive_modes from './drive_modes.png'
+import entertainment_features from './entertainment_features.png'
+import comfort_features from './comfort_features.webp'
+import driving_assistance_features from './driving_assistance_features.jpg'
+import driving_experience from './driving_experience.jpg'
+import lighting_features from './lighting_features.jpeg'
+import connected_car_features from './connected_car_features.jpeg'
+import infotainment_and_connectivity from './infotainment_and_connectivity.webp'
+import safety_features from './safety_features.jpg'
+import windows_and_cars_features from './windows_and_cars_features.webp'
+import car_power from './car_power.webp'
+import exterior_car_preferences from './exterior_car_preferences.jpg'
+import fuel_tank_capacity from './fuel_tank_capacity.jpg'
 
 export const assets = {
     facebook_icon,  
@@ -58,4 +71,17 @@ export const assets = {
     download_pdf,
     mail,
     print,
+    drive_modes,
+    entertainment_features,
+    comfort_features,
+    driving_assistance_features,
+    driving_experience,
+    lighting_features,
+    connected_car_features,
+    infotainment_and_connectivity,
+    safety_features,
+    windows_and_cars_features,
+    car_power,
+    exterior_car_preferences,
+    fuel_tank_capacity
 }

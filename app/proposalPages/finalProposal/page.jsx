@@ -11,7 +11,7 @@ import jsPDF from "jspdf";  // Correct import for jsPDF
 const FinalProposal = () => {
   const [proposalData, setProposalData] = useState(null);
   const [proposalIntroduction, setProposalIntroduction] = useState("");
-  const [carOverview, setCarOverview] = useState("");
+  const [carOverview, setCarOverview] = useState(""); 
   const [customizationSuggestions, setCustomizationSuggestions] = useState("");
   const [proposalSummary, setProposalSummary] = useState("");
   const [conclusion, setConclusion] = useState("");
@@ -25,10 +25,6 @@ const FinalProposal = () => {
 
   const router = useRouter();
   const printRef = useRef();
-
-
-
-
 
 
   const Footer = ({ currentPage, totalPages, generatedByEmail }) => {
@@ -47,11 +43,6 @@ const FinalProposal = () => {
     );
   };
   
-
-
-
-
-
 
   // Helper function to convert car model and color to match the image naming convention
   const getImageName = (carModel, carColor) => {
@@ -113,11 +104,10 @@ const FinalProposal = () => {
     fetchProposal();
   }, []);
 
-  
-
 
 
 const handleSendEmail = async () => {
+
   const node = printRef.current;
   const pdf = new jsPDF("portrait", "pt", "a4");
   const scale = 2; // scale up for higher resolution images
@@ -181,13 +171,8 @@ const handleSendEmail = async () => {
   
   
 
-
-
-
-
-
-
 const handleDownload = async () => {
+
   const node = printRef.current;
   const pdf = new jsPDF("portrait", "pt", "a4");
   const scale = 2; // scale up for higher resolution images
@@ -223,17 +208,17 @@ const handleDownload = async () => {
     pdf.addImage(dataUrl, "PNG", 0, shiftY, pdfWidth, pdfHeight);
   }
 
-  pdf.save(`Proposal_${PID}.pdf`);
-};
+    pdf.save(`Proposal_${PID}.pdf`);
+  };
 
 
-const handlePrintProposal = () => {
-  window.print();
-};
+  const handlePrintProposal = () => {
+    window.print();
+  };
 
-const handleFinish = () => {
-  router.push("/reviewRating");
-};
+  const handleFinish = () => {
+    router.push("/reviewRating");
+  };
 
 
 
@@ -267,40 +252,40 @@ const handleFinish = () => {
     <div className="p-4 flex flex-col items-center justify-between h-screen bg-white">
 
     {/* Fixed Buttons */}
-<div className="fixed top-5 right-5 z-50">
-  <div className="bg-white p-4 rounded-lg shadow-xl border border-gray-200 space-y-4">
-    <button
-      onClick={handleDownload}
-      className="w-full flex items-center justify-center px-4 py-3 text-lg font-semibold text-blue-600 border-2 border-blue-600 rounded-full shadow-lg hover:bg-blue-600 hover:text-white hover:scale-105 transform transition-all duration-300 ease-in-out"
-    >
-      <Image src={assets.download_pdf} alt="Download Icon" className="mr-2 w-6 h-6" /> 
-      Download
-    </button>
-    
-    <button
-      onClick={handlePrintProposal}
-      className="w-full flex items-center justify-center px-4 py-3 text-lg font-semibold text-blue-600 border-2 border-blue-600 rounded-full shadow-lg hover:bg-blue-600 hover:text-white hover:scale-105 transform transition-all duration-300 ease-in-out"
-    >
-      <Image src={assets.print} alt="Print Icon" className="mr-2 w-7 h-7"/> 
-      Print
-    </button>
-    
-    <button
-      onClick={handleSendEmail}
-      className="w-full flex items-center justify-center px-4 py-3 text-lg font-semibold text-blue-600 border-2 border-blue-600 rounded-full shadow-lg hover:bg-blue-600 hover:text-white hover:scale-105 transform transition-all duration-300 ease-in-out"
-    >
-      <Image src={assets.mail} alt="Email Icon" className="mr-2 w-6 h-6" /> 
-      Email
-    </button>
-    
-    <button
-      onClick={handleFinish}
-      className="w-full flex items-center justify-center px-4 py-3 text-lg font-semibold text-white bg-red-500 border-2 border-red-500 rounded-full shadow-lg hover:bg-red-700 hover:scale-105 transform transition-all duration-300 ease-in-out"
-    >
-      Finish
-    </button>
-  </div>
-</div>
+    <div className="fixed top-5 right-5 z-50">
+      <div className="bg-white p-4 rounded-lg shadow-xl border border-gray-200 space-y-4">
+        <button
+          onClick={handleDownload}
+          className="w-full flex items-center justify-center px-4 py-3 text-lg font-semibold text-blue-600 border-2 border-blue-600 rounded-full shadow-lg hover:bg-blue-600 hover:text-white hover:scale-105 transform transition-all duration-300 ease-in-out"
+        >
+          <Image src={assets.download_pdf} alt="Download Icon" className="mr-2 w-6 h-6" /> 
+          Download
+        </button>
+        
+        <button
+          onClick={handlePrintProposal}
+          className="w-full flex items-center justify-center px-4 py-3 text-lg font-semibold text-blue-600 border-2 border-blue-600 rounded-full shadow-lg hover:bg-blue-600 hover:text-white hover:scale-105 transform transition-all duration-300 ease-in-out"
+        >
+          <Image src={assets.print} alt="Print Icon" className="mr-2 w-7 h-7"/> 
+          Print
+        </button>
+        
+        <button
+          onClick={handleSendEmail}
+          className="w-full flex items-center justify-center px-4 py-3 text-lg font-semibold text-blue-600 border-2 border-blue-600 rounded-full shadow-lg hover:bg-blue-600 hover:text-white hover:scale-105 transform transition-all duration-300 ease-in-out"
+        >
+          <Image src={assets.mail} alt="Email Icon" className="mr-2 w-6 h-6" /> 
+          Email
+        </button>
+        
+        <button
+          onClick={handleFinish}
+          className="w-full flex items-center justify-center px-4 py-3 text-lg font-semibold text-white bg-red-500 border-2 border-red-500 rounded-full shadow-lg hover:bg-red-700 hover:scale-105 transform transition-all duration-300 ease-in-out"
+        >
+          Finish
+        </button>
+      </div>
+    </div>
 
 
 
@@ -312,7 +297,7 @@ const handleFinish = () => {
         {/* Header Section */}
         <div className="w-full flex justify-between items-center mb-6">
           <div className="flex items-center">
-            <Image src={logo} alt="AutoProposalAI Logo" width={120} height={100} />
+          <Image src={logo} alt="AutoProposalAI Logo" width={120} height={100} />
           </div>
           <div className="flex-grow flex justify-center">
             <h3 className="text-2xl font-bold text-blue-600">
@@ -464,15 +449,10 @@ const handleFinish = () => {
 
       {/* Footer Page 1 */}
       <div>
-        <Footer currentPage={1} totalPages={1} generatedByEmail={generatedByEmail} />
+        <Footer currentPage={1} totalPages={5} generatedByEmail={generatedByEmail} />
       </div>
       <br></br>
       <br></br>
-
-
-
-
-
 
         {/* Header Section */}
         <div className="w-full flex justify-between items-center mb-6">
@@ -568,19 +548,19 @@ const handleFinish = () => {
           </>
         )}
 
-        {/* Key Features Section */}
+        {/* Key Features Section 1*/}
         {carDetails && (
           <>
-            <hr className="border-t border-blue-600 mb-4" />
-            <div className="flex justify-left mb-4">
-              <div className="text-lg font-semibold mb-2" style={{ maxWidth: "fit-content" }}>
+            <hr className="border-t border-blue-600 mb-2" />
+            <div className="flex justify-left mb-2">
+              <div className="text-lg font-semibold" style={{ maxWidth: "fit-content" }}>
                 <h2 className="text-lg font-bold uppercase tracking-wide">E. Key Features</h2>
               </div>
             </div>
-            <div className="flex flex-wrap mb-4">
+            <div className="flex flex-wrap mb-2">
               <div className="w-full md:w-1/2 pr-4">
                 <h3 className="text-md font-semibold mb-2">Exterior</h3>
-                <ul className="list-disc ml-6 mb-4">
+                <ul className="list-disc ml-6 mb-2">
                   <li>{carDetails["Headlights"] || "N/A"} with LED DRLs</li>
                   <li>{carDetails["Roof Rails"] ? "Dual-Tone Roof Rails" : "N/A"}</li>
                   <li>{carDetails["Turn Indicators on ORVM"] ? "Electrically Adjustable ORVMs with LED Turn Indicators" : "N/A"}</li>
@@ -588,29 +568,12 @@ const handleFinish = () => {
                 </ul>
 
                 <h3 className="text-md font-semibold mb-2">Comfort & Convenience</h3>
-                <ul className="list-disc ml-6 mb-4">
+                <ul className="list-disc ml-6 mb-2">
                   <li>{carDetails["Automatic Climate Control"] ? "Automatic Climate Control" : "N/A"}</li>
                   <li>{carDetails["Rear Armrest"] ? "Rear Seat Armrest with Cup Holders" : "N/A"}</li>
                   <li>{carDetails["Parking Sensors"] ? "Rear Parking Sensors" : "N/A"}</li>
                   <li>{carDetails["Bootlid Opener"] ? "Electric Tailgate Release" : "N/A"}</li>
                   <li>{carDetails["Central Locking"] ? "Remote Central Locking" : "N/A"}</li>
-                </ul>
-
-                <h3 className="text-md font-semibold mb-2">Safety</h3>
-                <ul className="list-disc ml-6 mb-4">
-                  <li>{carDetails["Airbags"] ? `Dual Front Airbags (${carDetails["Airbags"]})` : "N/A"}</li>
-                  <li>{carDetails["Anti-Lock Braking System (ABS)"] && carDetails["Electronic Brake-force Distribution (EBD)"] ? "ABS with EBD" : "N/A"}</li>
-                  <li>{carDetails["Electronic Stability Program (ESP)"] ? "Corner Stability Control" : "N/A"}</li>
-                  <li>{carDetails["Child Seat Anchor Points"] ? "ISOFIX Child Seat Mounts" : "N/A"}</li>
-                  <li>{carDetails["Parking Assist"] ? "Reverse Parking Assist" : "N/A"}</li>
-                  <li>{carDetails["Seat Belt Warning"] ? "Seat Belt Reminder (Driver and Co-Driver)" : "N/A"}</li>
-                </ul>
-
-                <h3 className="text-md font-semibold mb-2">Additional Highlights</h3>
-                <ul className="list-disc ml-6 mb-4">
-                  <li>{carDetails["Follow me home headlamps"] ? "Follow-Me-Home Headlamps" : "N/A"}</li>
-                  <li>{carDetails["Drive Modes"] ? `Multi-Drive Modes (${carDetails["Drive Modes"]})` : "N/A"}</li>
-                  <li>{carDetails["Keyless Start"] ? "Smart Key with Push Button Start" : "N/A"}</li>
                 </ul>
               </div>
 
@@ -625,15 +588,74 @@ const handleFinish = () => {
                 </ul>
 
                 <h3 className="text-md font-semibold mb-2">Infotainment</h3>
-                <ul className="list-disc ml-6 mb-4">
+                <ul className="list-disc ml-6 mb-2">
                   <li>{carDetails["Speakers"] ? `Harman-Infotainment System with ${carDetails["Speakers"]} Speakers` : "N/A"}</li>
                   <li>{carDetails["Steering Mounted Controls"] ? "Steering Mounted Audio Controls" : "N/A"}</li>
                   <li>{carDetails["USB Compatibility"] && carDetails["Aux Compatibility"] ? "USB and AUX Ports" : "N/A"}</li>
                   <li>{carDetails["AM/FM Radio"] ? "Radio and MP3 Playback" : "N/A"}</li>
                 </ul>
+              </div>
+            </div>
+          </>
+        )}
 
+
+
+        {/* Footer Page 2 */}
+      <div>
+        <Footer currentPage={2} totalPages={5} generatedByEmail={generatedByEmail} />
+      </div>
+      <br></br>
+      <br></br>
+      <br></br>
+
+
+        {/* Header Section */}
+        <div className="w-full flex justify-between items-center mb-6">
+          <div className="flex items-center">
+            <Image src={logo} alt="AutoProposalAI Logo" width={120} height={100} />
+          </div>
+          <div className="flex-grow flex justify-center">
+            <h3 className="text-2xl font-bold text-blue-600">
+              Gen AI Based Customized Car Proposal
+            </h3>
+          </div>
+          <div className="text-gray-600 font-semibold text-sm">PID: {PID}</div>
+        </div>
+
+
+
+        {/* Key Features Section 2*/}
+        {carDetails && (
+          <>
+          <hr className="border-t border-blue-600 mb-2" />
+            <div className="flex justify-left mb-2">
+              <div className="text-lg font-semibold mb-2" style={{ maxWidth: "fit-content" }}>
+              </div>
+            </div>
+            <div className="flex flex-wrap mb-2">
+              <div className="w-full md:w-1/2 pr-4">
+                <h3 className="text-md font-semibold mb-2">Safety</h3>
+                <ul className="list-disc ml-6 mb-2">
+                  <li>{carDetails["Airbags"] ? `Dual Front Airbags (${carDetails["Airbags"]})` : "N/A"}</li>
+                  <li>{carDetails["Anti-Lock Braking System (ABS)"] && carDetails["Electronic Brake-force Distribution (EBD)"] ? "ABS with EBD" : "N/A"}</li>
+                  <li>{carDetails["Electronic Stability Program (ESP)"] ? "Corner Stability Control" : "N/A"}</li>
+                  <li>{carDetails["Child Seat Anchor Points"] ? "ISOFIX Child Seat Mounts" : "N/A"}</li>
+                  <li>{carDetails["Parking Assist"] ? "Reverse Parking Assist" : "N/A"}</li>
+                  <li>{carDetails["Seat Belt Warning"] ? "Seat Belt Reminder (Driver and Co-Driver)" : "N/A"}</li>
+                </ul>
+
+                <h3 className="text-md font-semibold mb-2">Additional Highlights</h3>
+                <ul className="list-disc ml-6 mb-2">
+                  <li>{carDetails["Follow me home headlamps"] ? "Follow-Me-Home Headlamps" : "N/A"}</li>
+                  <li>{carDetails["Drive Modes"] ? `Multi-Drive Modes (${carDetails["Drive Modes"]})` : "N/A"}</li>
+                  <li>{carDetails["Keyless Start"] ? "Smart Key with Push Button Start" : "N/A"}</li>
+                </ul>
+              </div>
+
+              <div className="w-full md:w-1/2">
                 <h3 className="text-md font-semibold mb-2">Engine & Performance</h3>
-                <ul className="list-disc ml-6 mb-4">
+                <ul className="list-disc ml-6 mb-2">
                   <li>{carDetails["Engine Type"] ? `Engine Type: ${carDetails["Engine Type"]}` : "N/A"}</li>
                   <li>{carDetails["Engine Power (cc)"] ? `Displacement: ${carDetails["Engine Power (cc)"]} cc` : "N/A"}</li>
                   <li>{carDetails["Max Power (bhp)"] && carDetails["Max Power (rpm)"] ? `Power Output: ${carDetails["Max Power (bhp)"]} PS @ ${carDetails["Max Power (rpm)"]} RPM` : "N/A"}</li>
@@ -642,7 +664,7 @@ const handleFinish = () => {
                 </ul>
 
                 <h3 className="text-md font-semibold mb-2">Dimensions & Capacity</h3>
-                <ul className="list-disc ml-6 mb-4">
+                <ul className="list-disc ml-6 mb-2">
                   <li>{carDetails["Length (mm)"] ? `Length: ${carDetails["Length (mm)"]} mm` : "N/A"}</li>
                   <li>{carDetails["Width(mm)"] ? `Width: ${carDetails["Width(mm)"]} mm` : "N/A"}</li>
                   <li>{carDetails["Height(mm)"] ? `Height: ${carDetails["Height(mm)"]} mm` : "N/A"}</li>
@@ -657,25 +679,20 @@ const handleFinish = () => {
         )}
 
 
-
-
-
-        
-
         {/* Car Overview Section */}
         <hr className="border-t border-blue-600 mb-4" />
         <h2 className="text-lg font-semibold mb-3">F. Customization Suggestions</h2>
 
         {/* Properly format and display customization suggestions */}
-        <div className="mb-4 text-sm leading-relaxed">
+        <div className="mb-4 text-base leading-normal" style={{ fontSize: '1rem' }}>
           {customizationSuggestions.split('\n').map((line, index) => {
             // Check if the line is a heading (doesn't start with a number or bullet point)
             const isHeading = !/^[0-9]/.test(line.trim()) && line.trim().length > 0;
 
-            return (
+            return (  
               <p
                 key={index}
-                className={`${isHeading ? 'font-bold mb-2' : 'ml-4 mb-1'}`}
+                className={`${isHeading ? 'font-bold mb-1' : 'ml-4 mb-0.5'}`}
               >
                 {line.trim()}
               </p>
@@ -683,31 +700,53 @@ const handleFinish = () => {
           })}
         </div>
 
+
+
+      {/* Footer Page 3 */}
+      <div>
+        <Footer currentPage={3} totalPages={5} generatedByEmail={generatedByEmail} />
+      </div>
+      <br></br>
+      <br></br>
+
+
+        {/* Header Section */}
+        <div className="w-full flex justify-between items-center mb-6">
+          <div className="flex items-center">
+            <Image src={logo} alt="AutoProposalAI Logo" width={120} height={100} />
+          </div>
+          <div className="flex-grow flex justify-center">
+            <h3 className="text-2xl font-bold text-blue-600">
+              Gen AI Based Customized Car Proposal
+            </h3>
+          </div>
+          <div className="text-gray-600 font-semibold text-sm">PID: {PID}</div>
+        </div>
+
+
+
         {/* Financial Overview Section */}
-        <hr className="border-t border-blue-600 mb-4" />
-        <h2 className="text-lg font-semibold mb-3">G. Financial Overview</h2>
+        <hr className="border-t border-blue-600 mb-3" /> {/* Adjusted the margin-bottom */}
+        <h2 className="text-lg font-semibold mb-2">G. Financial Overview</h2> {/* Keeping the heading size decent */}
 
         {/* Vehicle Cost Details */}
-        <p className="mb-2 text-sm">
-          <strong>Vehicle Cost (Showroom Price):</strong> ₹{carDetails["Ex-Showroom Price"]} lakhs
+        <p className="mb-1 text-base"> {/* Reduced the margin-bottom a bit */}
+          <strong>Vehicle Cost (Showroom Price):</strong> ₹{carDetails["Ex-Showroom Price"]}
         </p>
 
-        {/* Customization cost (fixed) */}
-        <p className="mb-2 text-sm"><strong>Customization cost:</strong> ₹6,103</p>
+        <p className="mb-1 text-base"><strong>Customization cost:</strong> ₹6,103</p>
 
-        {/* Total cost (calculated as vehicle cost + some fixed value) */}
-        <p className="mb-2 text-sm">
-          <strong>Total Cost:</strong> ₹{(carDetails["Ex-Showroom Price"] + 0.6).toFixed(2)} lakhs (including taxes and fees)
+        <p className="mb-1 text-base">
+          <strong>Total Cost:</strong> ₹{(carDetails["Ex-Showroom Price"] + 0.6).toFixed(2)} (including taxes and fees)
         </p>
 
-        {/* On-road Price (using the Mumbai field from CarSpecificationDataset) */}
-        <p className="mb-2 text-sm">
+        <p className="mb-1 text-base">
           <strong>On-Road Price:</strong> ₹{carDetails.Mumbai / 100000} lakhs (includes registration, road tax, and insurance)
         </p>
 
         {/* Financing Options */}
-        <h3 className="mt-4 mb-2 text-md font-semibold">Financing Options</h3>
-        <table className="table-auto w-full mb-4 border-collapse border border-gray-300">
+        <h3 className="mt-3 mb-1 text-base font-semibold">Financing Options</h3> {/* Compact margins */}
+        <table className="table-auto w-full mb-3 border-collapse border border-gray-300"> {/* Reduced padding */}
           <thead>
             <tr>
               <th className="border border-gray-300 p-2">Options</th>
@@ -718,31 +757,31 @@ const handleFinish = () => {
           </thead>
           <tbody>
             <tr>
-              <td className="border border-gray-300 p-2 font-semibold">Interest Rate</td>
-              <td className="border border-gray-300 p-2">3.5% APR</td>
-              <td className="border border-gray-300 p-2">3.8% APR</td>
-              <td className="border border-gray-300 p-2">3.2% APR</td>
+              <td className="border border-gray-300 p-1 font-semibold">Interest Rate</td> {/* Reduced padding */}
+              <td className="border border-gray-300 p-1">3.5% APR</td>
+              <td className="border border-gray-300 p-1">3.8% APR</td>
+              <td className="border border-gray-300 p-1">3.2% APR</td>
             </tr>
             <tr>
-              <td className="border border-gray-300 p-2 font-semibold">Loan Term</td>
-              <td className="border border-gray-300 p-2">5 Years</td>
-              <td className="border border-gray-300 p-2">Up to 7 Years</td>
-              <td className="border border-gray-300 p-2">3 Years</td>
+              <td className="border border-gray-300 p-1 font-semibold">Loan Term</td>
+              <td className="border border-gray-300 p-1">5 Years</td>
+              <td className="border border-gray-300 p-1">Up to 7 Years</td>
+              <td className="border border-gray-300 p-1">3 Years</td>
             </tr>
             <tr>
-              <td className="border border-gray-300 p-2 font-semibold">EMI (Estimated Monthly Installment)</td>
-              <td className="border border-gray-300 p-2">₹15,366</td>
-              <td className="border border-gray-300 p-2">₹12,594 (For a 7-year term)</td>
-              <td className="border border-gray-300 p-2">₹14,575 (30% of the total cost at the end of the term)</td>
+              <td className="border border-gray-300 p-1 font-semibold">EMI</td>
+              <td className="border border-gray-300 p-1">₹15,366</td>
+              <td className="border border-gray-300 p-1">₹12,594 (For a 7-year term)</td>
+              <td className="border border-gray-300 p-1">₹14,575 (30% of the total cost at term end)</td>
             </tr>
           </tbody>
         </table>
 
         {/* Insurance Options */}
-        <h3 className="mt-4 mb-2 text-md font-semibold">Insurance Options</h3>
-        <ul className="list-disc ml-8 mb-4 text-sm">
+        <h3 className="mt-3 mb-1 text-base font-semibold">Insurance Options</h3>
+        <ul className="list-disc ml-6 mb-2 text-base">
           <li>
-            <strong>Comprehensive Insurance:</strong> ₹25,000 per year (includes third-party liability, own damage, and personal accident cover)
+            <strong>Comprehensive Insurance:</strong> ₹25,000 per year (includes third-party liability, damage, and accident cover)
           </li>
           <li>
             <strong>Third-Party Insurance:</strong> ₹8,000 per year (minimum legal requirement)
@@ -750,26 +789,25 @@ const handleFinish = () => {
         </ul>
 
         {/* Down Payment and Amount Financed */}
-        <table className="table-auto w-full mb-4 border-collapse border border-gray-300">
+        <table className="table-auto w-full mb-3 border-collapse border border-gray-300"> {/* Tweaked the margins */}
           <thead>
             <tr>
-              <th className="border border-gray-300 p-2">Options</th>
-              <th className="border border-gray-300 p-2">Standard Loan</th>
+              <th className="border border-gray-300 p-1">Options</th>
+              <th className="border border-gray-300 p-1">Standard Loan</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td className="border border-gray-300 p-2 font-semibold">
-                <ul className="list-disc ml-4 text-sm">
+              <td className="border border-gray-300 p-1">
+                <ul className="list-disc ml-4 text-base">
                   <li>Minimum Down Payment: 20% of On-Road Price</li>
                   <li>Amount: ₹{(carDetails.Mumbai * 0.2 / 100000).toFixed(2)} lakhs</li>
                 </ul>
               </td>
-              <td className="border border-gray-300 p-2">
-                <ul className="list-disc ml-4 text-sm">
+              <td className="border border-gray-300 p-1">
+                <ul className="list-disc ml-4 text-base">
                   <li><strong>Option 1:</strong> ₹{(carDetails.Mumbai * 0.8 / 100000).toFixed(2)} lakhs</li>
-                  <li><strong>Option 2:</strong> ₹{(carDetails.Mumbai * 0.8 / 100000).toFixed(2)} lakhs</li>
-                  <li><strong>Option 3:</strong> ₹{(carDetails.Mumbai * 0.8 / 100000).toFixed(2)} lakhs (excluding balloon payment)</li>
+                  <li><strong>Option 2:</strong> ₹{(carDetails.Mumbai * 0.8 / 100000).toFixed(2)} lakhs (excluding balloon payment)</li>
                 </ul>
               </td>
             </tr>
@@ -777,9 +815,10 @@ const handleFinish = () => {
         </table>
 
         {/* Final Text Part */}
-        <p className="text-sm leading-relaxed">
-          These options provide a range of choices for financing your {carDetails.Model} {carDetails.Version}, allowing flexibility based on your financial preferences and needs. For further details and to choose the best option, please contact our finance team.
+        <p className="text-sm leading-relaxed mb-2">
+          *These options provide a range of choices for financing your {carDetails.Model} {carDetails.Version}, allowing flexibility based on your financial preferences and needs. For further details and to choose the best option, please contact our finance team.
         </p>
+
 
         {/* Proposal Summary Section */}
         <hr className="border-t border-blue-600 mb-4" />
@@ -795,12 +834,39 @@ const handleFinish = () => {
             ))}
         </div>
 
+        <br></br>
+        <br></br>
+
+
+
+        {/* Footer Page 4 */}
+        <div>
+        <Footer currentPage={4} totalPages={5} generatedByEmail={generatedByEmail} />
+      </div>
+      <br></br>
+      <br></br>
+
+
+        {/* Header Section */}
+        <div className="w-full flex justify-between items-center mb-6">
+          <div className="flex items-center">
+            <Image src={logo} alt="AutoProposalAI Logo" width={120} height={100} />
+          </div>
+          <div className="flex-grow flex justify-center">
+            <h3 className="text-2xl font-bold text-blue-600">
+              Gen AI Based Customized Car Proposal
+            </h3>
+          </div>
+          <div className="text-gray-600 font-semibold text-sm">PID: {PID}</div>
+        </div>
+
+
 
 
         {/* Conclusion Section */}
         <hr className="border-t border-blue-600 mb-4" />
         <h2 className="text-lg font-semibold mb-3">I. Conclusion</h2>
-        <p className="mb-4 text-sm leading-relaxed">{conclusion}</p>
+        <p className="mb-4 text-base leading-relaxed">{conclusion}</p>
 
         {/* Acknowledgement Section */}
         <hr className="border-t border-blue-600 mb-4" />
@@ -837,16 +903,31 @@ const handleFinish = () => {
           </div>
         </div>
 
-        {/* Footer Section */}
-        <div className="mt-4 pt-4 border-t border-blue-600 text-sm flex justify-between items-center">
-          <span>
-            <strong>Date:</strong> {getCurrentDate()}
-          </span>
-          <span>
-            <strong>Generated By:</strong> {generatedByEmail}
-          </span>
-          <span>Page 1 of 1</span>
-        </div>
+
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+
+
+        {/* Footer Page 4 */}
+        <div>
+        <Footer currentPage={5} totalPages={5} generatedByEmail={generatedByEmail} />
+      </div>
+      
       </div>
 
       {/* Button Container */}

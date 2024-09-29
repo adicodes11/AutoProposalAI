@@ -275,7 +275,7 @@ const DetailedRequirement2 = () => {
             <div className={`${currentSection === 0 ? "block" : "hidden"}`}>
               <h2 className="text-3xl font-bold text-gray-700 flex items-center">
                 Window & Mirror Features
-                <HelperIcon imageSrc={assets.window_features} />
+                <HelperIcon imageSrc={assets.windows_and_cars_features} />
               </h2>
               <div className="grid grid-cols-2 gap-4 mt-4">
                 {[
@@ -505,7 +505,7 @@ const DetailedRequirement2 = () => {
             <div className={`${currentSection === 3 ? "block" : "hidden"}`}>
               <h2 className="text-3xl font-bold text-gray-700 flex items-center">
                 Infotainment & Connectivity Features
-                <HelperIcon imageSrc={assets.infotainment_features} />
+                <HelperIcon imageSrc={assets.infotainment_and_connectivity} />
               </h2>
               <div className="grid grid-cols-2 gap-4 mt-4">
                 {[

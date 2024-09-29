@@ -23,18 +23,35 @@ const Requirement2 = () => {
   }, []);
 
   const handleStyleChange = (style) => {
-    const newSelection = selectedStyles.includes(style)
-      ? selectedStyles.filter((s) => s !== style)
-      : [...selectedStyles, style];
+    let newSelection;
+
+    if (style === 'No Preference') {
+      // If "No Preference" is selected, deselect all other styles and select only "No Preference"
+      if (selectedStyles.includes('No Preference')) {
+        newSelection = []; // Unselect "No Preference" if it was selected
+      } else {
+        newSelection = ['No Preference']; // Only select "No Preference"
+      }
+    } else {
+      // If any other style is selected, remove "No Preference" and add the selected style
+      newSelection = selectedStyles.includes(style)
+        ? selectedStyles.filter((s) => s !== style) // Remove the selected style if already selected
+        : [...selectedStyles.filter((s) => s !== 'No Preference'), style]; // Remove "No Preference" and add the new style
+    }
 
     setSelectedStyles(newSelection);
-    if (typeof window !== 'undefined') {
-      sessionStorage.setItem('bodyStyles', JSON.stringify(newSelection)); // Save to sessionStorage
-    }
+    sessionStorage.setItem('bodyStyles', JSON.stringify(newSelection)); // Save to sessionStorage
   };
 
   const handleSubmit = async () => {
-    if (selectedStyles.length === 0) {
+    let stylesToSubmit = selectedStyles;
+
+    // If "No Preference" is selected, submit all available styles except "No Preference"
+    if (stylesToSubmit.includes('No Preference')) {
+      stylesToSubmit = ['SUV', 'Sedan', 'Hatchback', 'Coupe'];
+    }
+
+    if (stylesToSubmit.length === 0) {
       alert('Please select at least one car body style.');
       return;
     }
@@ -51,7 +68,7 @@ const Requirement2 = () => {
       const response = await fetch('/api/requirementPagesRoutes/requirement2Route', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bodyStyle: selectedStyles, sessionId }), // Include sessionId
+        body: JSON.stringify({ bodyStyle: stylesToSubmit, sessionId }), // Include sessionId
       });
 
       if (response.ok) {
