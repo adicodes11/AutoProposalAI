@@ -710,7 +710,7 @@ const DetailedRequirement2 = () => {
               </button>
             </div>
             <p className="text-gray-700 mb-4">
-              Unfortunately, we couldn't generate any car recommendations based on your current selections.
+              Unfortunately, we couldn&apos;t generate any car recommendations based on your current selections.
             </p>
             <p className="text-gray-700 mb-4">
               Some of your preferences may be too specific or uncommon. Please consider adjusting the following:
@@ -718,7 +718,7 @@ const DetailedRequirement2 = () => {
             <ul className="list-disc list-inside text-gray-700 mb-4 space-y-2">
               <li>Try selecting a broader range of features.</li>
               <li>Reduce the number of specific requirements.</li>
-              <li>Make sure you're not combining incompatible features.</li>
+              <li>Make sure you&apos;re not combining incompatible features.</li>
             </ul>
             <p className="text-gray-700 mb-6">
               This will help improve the chances of finding suitable recommendations.
