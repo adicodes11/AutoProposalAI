@@ -319,7 +319,7 @@ const RecommendedCars = () => {
               <tr>
                 <td className="border border-gray-300 p-3 font-bold">NCAP Rating</td>
                 {(loading ? placeholderData : top4Recommendations).map((car, index) => (
-                  <td key={index} className="border border-gray-300 p-3">{car.ncapRating} Stars</td>
+                  <td key={index} className="border border-gray-300 p-3">{car.ncapRatingAdult} Stars</td>
                 ))}
               </tr>
               <tr>

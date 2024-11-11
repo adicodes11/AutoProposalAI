@@ -44,12 +44,12 @@ function Footer() {
             <h4 className='font-semibold mb-4'>Company</h4>
             <ul className='space-y-2'>
               <li>
-                <Link href='/about'>
+                <Link href='/aboutUs'>
                   <span className='text-gray-800 hover:text-blue-500 cursor-pointer transition-colors duration-300'>About Us</span>
                 </Link>
               </li>
               <li>
-                <Link href='/contact'>
+                <Link href='/contactUs'>
                   <span className='text-gray-800 hover:text-blue-500 cursor-pointer transition-colors duration-300'>Contact Us</span>
                 </Link>
               </li>

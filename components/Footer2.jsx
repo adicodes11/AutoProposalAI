@@ -14,7 +14,7 @@ const Footer2 = () => {
         <span className="text-black">|</span>
         <Link href="/accessibility" className="hover:underline hover:text-blue-700">Accessibility</Link>
         <span className="text-black">|</span>
-        <Link href="/contact" className="hover:underline hover:text-blue-700">Contact Us</Link>
+        <Link href="/contactUs" className="hover:underline hover:text-blue-700">Contact Us</Link>
       </div>
 
       {/* Right Side */}

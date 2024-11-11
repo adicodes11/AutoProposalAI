@@ -6,6 +6,7 @@ import { assets } from "@/assets/assets";
 import Footer2 from "@/components/Footer2";
 import { useRouter } from "next/navigation";
 
+
 // HelperIcon component for showing popover on hover
 const HelperIcon = ({ imageSrc }) => {
   const [showPopover, setShowPopover] = useState(false);
@@ -58,6 +59,8 @@ const DetailedRequirement2 = () => {
     extendedWarranty: "",
     registrationInsurance: "",
   });
+
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const [currentSection, setCurrentSection] = useState(0); // Active section
   const [progress, setProgress] = useState(0); // Progress percentage
@@ -176,7 +179,7 @@ const DetailedRequirement2 = () => {
       if (recommendationResponse.ok) {
         const recommendationData = await recommendationResponse.json();
         console.log("Recommendations:", recommendationData);
-        alert("Recommendations generated successfully!");
+        // alert("Recommendations generated successfully!");
 
         // Step 3: Call the new API to calculate the match percentage
         const matchResponse = await fetch(
@@ -197,7 +200,26 @@ const DetailedRequirement2 = () => {
           // Redirect to the analyzing page
           router.push("/analyzing");
         } else {
-          alert("Error calculating match percentage. Please try again.");
+          // // alert("Error calculating match percentage. Please try again.");
+          // sessionStorage.clear();
+          // setShowErrorModal(true); // Show the modal on error
+
+
+          // Step 1: Store the required session storage values before clearing
+          const sessionId = sessionStorage.getItem('sessionId');
+          const userId = sessionStorage.getItem('userId');
+          const firstName = sessionStorage.getItem('firstName');
+
+          // Step 2: Clear the session storage
+          sessionStorage.clear();
+
+          // Step 3: Restore the required session storage values
+          sessionStorage.setItem('sessionId', sessionId);
+          sessionStorage.setItem('userId', userId);
+          sessionStorage.setItem('firstName', firstName);
+
+          // Step 4: Show the error modal
+          setShowErrorModal(true); // Show the modal on error
         }
       } else {
         alert("Error generating recommendations. Please try again.");
@@ -222,6 +244,15 @@ const DetailedRequirement2 = () => {
     } else {
       setCurrentSection(currentSection - 1);
     }
+  };
+
+  const handleCloseModal = () => {
+    setShowErrorModal(false); // Close the modal
+  };
+
+  const handleBackToSelection = () => {
+    handleCloseModal();  // Close the modal before navigating
+    router.push('/requirementPages/requirement1');
   };
 
   return (
@@ -655,6 +686,57 @@ const DetailedRequirement2 = () => {
           </div>
         </div>
       </div>
+
+
+
+      {/* Error Modal */}
+      {showErrorModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          {/* Background overlay */}
+          <div 
+            className="fixed inset-0 bg-black opacity-50 transition-opacity duration-300"
+            onClick={handleCloseModal} // Allow closing by clicking outside
+          ></div>
+
+          {/* Modal content */}
+          <div className="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 transform transition-transform duration-500 scale-95">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold text-red-600">Recommendation Error</h2>
+              <button 
+                onClick={handleCloseModal} 
+                className="text-gray-500 hover:text-gray-700 transition-transform transform hover:scale-110"
+              >
+                &times;
+              </button>
+            </div>
+            <p className="text-gray-700 mb-4">
+              Unfortunately, we couldn't generate any car recommendations based on your current selections.
+            </p>
+            <p className="text-gray-700 mb-4">
+              Some of your preferences may be too specific or uncommon. Please consider adjusting the following:
+            </p>
+            <ul className="list-disc list-inside text-gray-700 mb-4 space-y-2">
+              <li>Try selecting a broader range of features.</li>
+              <li>Reduce the number of specific requirements.</li>
+              <li>Make sure you're not combining incompatible features.</li>
+            </ul>
+            <p className="text-gray-700 mb-6">
+              This will help improve the chances of finding suitable recommendations.
+            </p>
+
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={handleBackToSelection}
+                className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 transition duration-300 transform hover:scale-105"
+              >
+                Back to Selections
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
 
       <Footer2 />
     </div>

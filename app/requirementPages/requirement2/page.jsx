@@ -71,17 +71,21 @@ const Requirement2 = () => {
         body: JSON.stringify({ bodyStyle: stylesToSubmit, sessionId }), // Include sessionId
       });
 
+      // Check if the response is ok and handle the success case
       if (response.ok) {
+        const result = await response.json(); // Optional: Capture the response data
+        console.log('Successfully submitted:', result); // Log success
         router.push('/requirementPages/requirement3');
       } else {
-        alert('Failed to submit your data. Please check the console for details.');
+        const errorData = await response.json();
+        alert(`Failed to submit your data: ${errorData.error || 'An error occurred.'}`);
       }
     } catch (error) {
       console.error('Error:', error);
       alert('An error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsSubmitting(false);
   };
 
   return (
